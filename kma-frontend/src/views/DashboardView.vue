@@ -218,7 +218,7 @@ const submitNote = async () => {
     let noteId = null;
     if (editingNote.value) {
       const res = await axios.put(
-        `http://localhost:8080/api/notes/${editingNote.value.id}`,
+        `http://localhost:8080/api/notes/update/${editingNote.value.id}`,
         noteForm.value,
         config
       );
@@ -479,9 +479,12 @@ onMounted(async () => {
 
   const subsRes = await axios.get('http://localhost:8080/api/subscribers/', config)
   subscribers.value = subsRes.data
+  console.log('Subscribers från API:', subsRes.data)
+
 
   const notesRes = await axios.get('http://localhost:8080/api/notes/all', config)
   notes.value = notesRes.data
+  console.log('NOTES från API:', notesRes.data)
 
 })
 </script>

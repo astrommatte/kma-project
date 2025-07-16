@@ -1,0 +1,25 @@
+spring:
+  servlet:
+    multipart:
+      max-file-size: 2MB
+      max-request-size: 5MB
+  application:
+    name: kma_backend
+  datasource:
+    url: jdbc:postgresql://localhost:5432/kma_db
+    username: postgres
+    password: rootx!
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+app:
+  admin-email: astrom.matte@gmail.com
+  image:
+    upload-dir: uploads/
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG         # Loggar SQL-satser
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE

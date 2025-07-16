@@ -21,7 +21,7 @@
                 Skapad för {{ fromNow(note.createdAt) }}
               </span>
               <h5>
-                Skriven av: {{ note.owner?.firstName || 'Okänd' }}<br>
+                Skriven av: {{ note.createdBy?.firstName || 'Okänd' }}<br>
               </h5>
             </small>
           </div>
