@@ -45,12 +45,12 @@
             style="max-width: 200px; border-radius: 6px; cursor: pointer;"
             @click="() => { selectedImage = `http://localhost:8080/api/images/${id}` }"
           />
-          <button
-            v-if="note.owner?.id === currentUser.id"
+          <Button
+            v-if="note.createdBy?.id === currentUser.id"
             @click="deleteImage(id, note)"
+            icon="pi pi-times" severity="danger" variant="text" rounded aria-label="Cancel"
           >
-            ✕
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -78,18 +78,18 @@
   </Accordion>
 
   <Dialog
-  v-model:visible="dialogVisible"
-  :modal="true"
-  :closable="true"
-  @hide="selectedImage = null"
-  style="max-width: 90vw; max-height: 90vh;"
->
-  <img
-    :src="selectedImage"
-    alt="Fullstor bild"
-    style="width: 100%; height: auto; border-radius: 6px;"
-  />
-</Dialog>
+    v-model:visible="dialogVisible"
+    :modal="true"
+    :closable="true"
+    @hide="selectedImage = null"
+    style="max-width: 90vw; max-height: 90vh;"
+  >
+    <img
+      :src="selectedImage"
+      alt="Fullstor bild"
+      style="width: 100%; height: auto; border-radius: 6px;"
+    />
+  </Dialog>
 
 
   <div class="p-mt-3">

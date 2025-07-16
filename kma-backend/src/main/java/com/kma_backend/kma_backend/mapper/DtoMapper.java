@@ -1,5 +1,6 @@
 package com.kma_backend.kma_backend.mapper;
 
+import com.kma_backend.kma_backend.image.Image;
 import com.kma_backend.kma_backend.note.Note;
 import com.kma_backend.kma_backend.note.NoteDTO;
 import com.kma_backend.kma_backend.subscriber.Subscriber;
@@ -8,6 +9,9 @@ import com.kma_backend.kma_backend.user.User;
 import com.kma_backend.kma_backend.user.UserDTO;
 import com.kma_backend.kma_backend.user.UserRole;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class DtoMapper {
@@ -48,6 +52,13 @@ public class DtoMapper {
         dto.setUpdatedAt(note.getUpdatedAt());
         // Mappa User entity till UserDTO
         dto.setCreatedBy(toUserDto(note.getCreatedBy()));
+
+        List<Long> imageIds = note.getImages()
+                .stream()
+                .map(Image::getId)
+                .toList();
+        dto.setImageIds(imageIds);
+
         return dto;
     }
 }

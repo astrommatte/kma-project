@@ -95,15 +95,15 @@
       <div v-if="images.length">
   <h5>Bilder</h5>
   <div class="image-gallery">
-    <img
-      v-for="img in images"
-      :key="img.id"
-      :src="`http://localhost:8080/images/${img.id}`"
-      :alt="img.fileName"
-      style="max-width: 150px; margin-right: 10px;"
-    />
+      <img
+        v-for="img in images"
+        :key="img.id"
+        :src="`http://localhost:8080/images/${img.id}`"
+        :alt="img.fileName"
+        style="max-width: 150px; margin-right: 10px;"
+      />
+    </div>
   </div>
-</div>
     <!-- Noteringsformulär -->
     <Dialog
       v-model:visible="showNoteForm"

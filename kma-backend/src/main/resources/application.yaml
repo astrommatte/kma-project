@@ -15,9 +15,10 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true
 app:
-  admin-email: astrom.matte@gmail.com
   image:
     upload-dir: uploads/
+  admin-email: astrom.matte@gmail.com
+
 
 logging:
   level:
