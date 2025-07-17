@@ -45,6 +45,8 @@ const isRegistering = ref(false)
 const router = useRouter()
 const allowRegister = ref(true)
 
+const apiUrl = import.meta.env.VITE_API_URL;
+
 onMounted(() => {
   const stored = localStorage.getItem('allowRegister')
   allowRegister.value = stored !== 'false' // default true
@@ -61,7 +63,7 @@ const handleSubmit = async () => {
   if (isRegistering.value) {
     // Registrering
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL}/api/users/create`, {
+      await axios.post(`${apiUrl}/api/users/create`, {
         firstName: firstName.value,
         lastName: lastName.value,
         email: email.value,
@@ -80,7 +82,7 @@ const handleSubmit = async () => {
 const login = async () => {
   try {
     const authHeader = 'Basic ' + btoa(`${email.value}:${password.value}`)
-    await axios.get(`${import.meta.env.VITE_API_URL}/api/auth/me`, {
+    await axios.get(`${apiUrl}/api/auth/me`, {
       headers: { Authorization: authHeader }
     })
 

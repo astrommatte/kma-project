@@ -63,6 +63,8 @@
     password: ''
   })
   
+  const apiUrl = import.meta.env.VITE_API_URL;
+
   const authHeader = localStorage.getItem('auth')
   const config = { headers: { Authorization: authHeader } }
   
@@ -74,10 +76,10 @@
     if (stored !== null) {
       allowRegister.value = stored === 'true'
     }
-    const meRes = await axios.get(`${import.meta.env.VITE_API_URL}/api/auth/me`, config)
+    const meRes = await axios.get(`${apiUrl}/api/auth/me`, config)
     currentUser.value = meRes.data
   
-    const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/users/`, config)
+    const res = await axios.get(`${apiUrl}/api/users/`, config)
     users.value = res.data
   })
 
@@ -88,7 +90,7 @@
   const changePassword = async (userId, newPassword) => {
   try {
     await axios.put(
-      `${import.meta.env.VITE_API_URL}/api/users/admin/${userId}/password`,
+      `${apiUrl}/api/users/admin/${userId}/password`,
       { newPassword }, // matchar PasswordChangeDTO
       {
         headers: {
@@ -111,13 +113,13 @@
         if (form.value.password && form.value.password.length > 0) {
          await changePassword(selectedUser.value.id, form.value.password)
         }
-        const res = await axios.put(`${import.meta.env.VITE_API_URL}/api/users/update/${selectedUser.value.id}`, form.value, config)
+        const res = await axios.put(`${apiUrl}/api/users/update/${selectedUser.value.id}`, form.value, config)
         const updated = res.data
         const index = users.value.findIndex(u => u.id === updated.id)
         users.value[index] = updated
       } else {
         // Create
-        const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/users/create`, form.value, config)
+        const res = await axios.post(`${apiUrl}/api/users/create`, form.value, config)
         users.value.push(res.data)
         showForm.value = false
       }
@@ -129,7 +131,7 @@
   
   const deleteUser = async (id) => {
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL}/api/users/delete/${id}`, config)
+      await axios.delete(`${apiUrl}/api/users/delete/${id}`, config)
       users.value = users.value.filter(u => u.id !== id)
     } catch (err) {
       console.error('Fel vid borttagning:', err)

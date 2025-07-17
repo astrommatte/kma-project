@@ -40,7 +40,7 @@
           style="display: inline-block;"
         >
           <img
-            :src="`${import.meta.env.VITE_API_URL}/api/images/${id}`"
+            :src="`${apiUrl}/api/images/${id}`"
             alt="Bifogad bild"
             style="max-width: 200px; border-radius: 6px; cursor: pointer;"
             @click="() => { selectedImage = `${import.meta.env.VITE_API_URL}/api/images/${id}` }"
@@ -130,6 +130,7 @@ const props = defineProps({
 
 const emit = defineEmits(['create-note', 'edit-note', 'delete-note'])
 
+const apiUrl = import.meta.env.VITE_API_URL;
 const confirm = useConfirm()
 
 const sortedNotes = computed(() => {

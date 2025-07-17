@@ -98,7 +98,7 @@
       <img
         v-for="img in images"
         :key="img.id"
-        :src="`http://localhost:8080/images/${img.id}`"
+        :src="`${apiUrl}/api/images/${img.id}`"
         :alt="img.fileName"
         style="max-width: 150px; margin-right: 10px;"
       />
@@ -152,6 +152,8 @@ import SubscriberList from '@/components/SubscriberList.vue'
 import NotesList from '@/components/NotesList.vue'
 import { Dialog } from 'primevue'
 
+const apiUrl = import.meta.env.VITE_API_URL;
+
 const images = ref([]);
 
 const users = ref([])
@@ -200,7 +202,7 @@ const filteredSubscribers = computed(() => {
 
 async function fetchImages(noteId) {
   try {
-    const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/notes/${noteId}/images`, config);
+    const res = await axios.get(`${apiUrl}/api/notes/${noteId}/images`, config);
     images.value = res.data;
   } catch (err) {
     console.error('Kunde inte hämta bilder:', err);
@@ -218,7 +220,7 @@ const submitNote = async () => {
     let noteId = null;
     if (editingNote.value) {
       const res = await axios.put(
-        `${import.meta.env.VITE_API_URL}/api/notes/update/${editingNote.value.id}`,
+        `${apiUrl}/api/notes/update/${editingNote.value.id}`,
         noteForm.value,
         config
       );
@@ -226,7 +228,7 @@ const submitNote = async () => {
       // uppdatera notes-lista osv
     } else {
       const res = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/notes/create`,
+        `${apiUrl}/api/notes/create`,
         noteForm.value,
         config
       );
@@ -240,7 +242,7 @@ const submitNote = async () => {
       formData.append('file', selectedFile.value);
       formData.append('noteId', noteId);
 
-      await axios.post(`${import.meta.env.VITE_API_URL}/api/images/upload`, formData, {
+      await axios.post(`${apiUrl}/api/images/upload`, formData, {
   headers: {
     'Content-Type': 'multipart/form-data',
     Authorization: localStorage.getItem('auth') || '', // <-- hämta härifrån
@@ -296,7 +298,7 @@ const cancelEdit = () => {
 
 const deleteNote = async id => {
   try {
-    await axios.delete(`${import.meta.env.VITE_API_URL}/api/notes/${id}`, config)
+    await axios.delete(`${apiUrl}/api/notes/${id}`, config)
     notes.value = notes.value.filter(n => n.id !== id)
   } catch (err) {
     console.error('Fel vid borttagning:', err)
@@ -357,7 +359,7 @@ const submitSubForm = async () => {
     if (selectedSub.value) {
       // Uppdatera subscriber
       const res = await axios.put(
-        `${import.meta.env.VITE_API_URL}/subscribers/update/${selectedSub.value.id}`,
+        `${apiUrl}/api/subscribers/update/${selectedSub.value.id}`,
         subForm.value,
         config
       )
@@ -368,7 +370,7 @@ const submitSubForm = async () => {
     } else {
       // Skapa ny subscriber (backend sätter ägaren automatiskt via principal)
       const res = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/subscribers/create`,
+        `${apiUrl}/api/subscribers/create`,
         subForm.value,
         config
       )
@@ -385,7 +387,7 @@ const submitSubForm = async () => {
 
 const fetchSubscribers = async () => {
   try {
-    const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/subscribers/`, config)
+    const res = await axios.get(`${apiUrl}/api/subscribers/`, config)
     subscribers.value = res.data
   } catch (err) {
     console.error('Kunde inte hämta subscribers:', err)
@@ -394,7 +396,7 @@ const fetchSubscribers = async () => {
 
 const fetchNotes = async () => {
   try {
-    const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/notes/all`, config)
+    const res = await axios.get(`${apiUrl}/api/notes/all`, config)
     notes.value = res.data
   } catch (err) {
     console.error('Kunde inte hämta anteckningar:', err)
@@ -403,7 +405,7 @@ const fetchNotes = async () => {
 
 const deleteSubscriber = async (subscriber) => {
   try {
-    await axios.delete(`${import.meta.env.VITE_API_URL}/api/subscribers/delete/${subscriber.id}`, config)
+    await axios.delete(`${apiUrl}/api/subscribers/delete/${subscriber.id}`, config)
     subscribers.value = subscribers.value.filter(s => s.id !== subscriber.id)
   } catch (err) {
     console.error('Kunde inte ta bort subscriber:', err)
@@ -411,20 +413,16 @@ const deleteSubscriber = async (subscriber) => {
 }
 
 onMounted(async () => {
-  const meRes = await axios.get(`${import.meta.env.VITE_API_URL}/api/auth/me`, config)
+  const meRes = await axios.get(`${apiUrl}/api/auth/me`, config)
   currentUser.value = meRes.data
 
-  const usersRes = await axios.get(`${import.meta.env.VITE_API_URL}/api/users/`, config)
+  const usersRes = await axios.get(`${apiUrl}/api/users/`, config)
   users.value = usersRes.data
 
-const subsRes = await axios.get(`${import.meta.env.VITE_API_URL}/api/subscribers/`, config)
+  const subsRes = await axios.get(`${apiUrl}/api/subscribers/`, config)
   subscribers.value = subsRes.data
-  console.log('Subscribers från API:', subsRes.data)
 
-
-  const notesRes = await axios.get(`${import.meta.env.VITE_API_URL}/api/notes/all`, config)
+  const notesRes = await axios.get(`${apiUrl}/api/notes/all`, config)
   notes.value = notesRes.data
-  console.log('NOTES från API:', notesRes.data)
-
 })
 </script>
