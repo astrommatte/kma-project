@@ -37,6 +37,7 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/ping").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()  // Tillåt preflight
                         .requestMatchers(HttpMethod.POST, "/api/users/**").permitAll()
                         .anyRequest().authenticated()
