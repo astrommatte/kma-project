@@ -43,7 +43,7 @@
             :src="`${apiUrl}/api/images/${id}`"
             alt="Bifogad bild"
             style="max-width: 200px; border-radius: 6px; cursor: pointer;"
-            @click="() => { selectedImage = `${import.meta.env.VITE_API_URL}/api/images/${id}` }"
+            @click="() => { selectedImage = `${apiUrl}/api/images/${id}` }"
           />
           <Button
             v-if="note.createdBy?.id === currentUser.id"
