@@ -6,9 +6,9 @@ spring:
   application:
     name: kma_backend
   datasource:
-    url: jdbc:postgresql://localhost:5432/kma_db
-    username: postgres
-    password: rootx!
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: update
@@ -17,7 +17,7 @@ spring:
 app:
   image:
     upload-dir: uploads/
-  admin-email: astrom.matte@gmail.com
+  admin-email: ${ADMIN_EMAIL}
 
 
 logging:
