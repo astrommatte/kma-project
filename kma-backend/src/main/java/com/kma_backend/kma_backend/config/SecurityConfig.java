@@ -40,6 +40,7 @@ public class SecurityConfig {
                         .requestMatchers("/ping").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()  // Tillåt preflight
                         .requestMatchers(HttpMethod.POST, "/api/users/**").permitAll()
+                        .requestMatchers("/api/images/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(withDefaults())

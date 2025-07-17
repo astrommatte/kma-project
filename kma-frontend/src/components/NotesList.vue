@@ -32,7 +32,7 @@
       <p class="mt-2">{{ note.content }}</p>
 
       <!-- Visa alla bilder -->
-      <div v-if="note.imageIds?.length" class="mt-3 flex gap-3 flex-wrap">
+      <div v-if="note.imageIds?.length && currentUser" class="mt-3 flex gap-3 flex-wrap">
         <div
           v-for="id in note.imageIds"
           :key="id"
@@ -178,7 +178,7 @@ const deleteImage = async (imageId, note) => {
   if (!window.confirm('Är du säker på att du vill ta bort denna bild?')) return;
 
   try {
-    await axios.delete(`${import.meta.env.VITE_API_URL}/api/images/${imageId}`, {
+    await axios.delete(`${apiUrl}/api/images/${imageId}`, {
       headers: { Authorization: localStorage.getItem('auth') },
     });
 
