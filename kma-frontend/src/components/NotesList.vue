@@ -40,10 +40,10 @@
           style="display: inline-block;"
         >
           <img
-            :src="`http://localhost:8080/api/images/${id}`"
+            :src="`${import.meta.env.VITE_API_URL}/api/images/${id}`"
             alt="Bifogad bild"
             style="max-width: 200px; border-radius: 6px; cursor: pointer;"
-            @click="() => { selectedImage = `http://localhost:8080/api/images/${id}` }"
+            @click="() => { selectedImage = `${import.meta.env.VITE_API_URL}/api/images/${id}` }"
           />
           <Button
             v-if="note.createdBy?.id === currentUser.id"
@@ -177,7 +177,7 @@ const deleteImage = async (imageId, note) => {
   if (!window.confirm('Är du säker på att du vill ta bort denna bild?')) return;
 
   try {
-    await axios.delete(`http://localhost:8080/api/images/${imageId}`, {
+    await axios.delete(`${import.meta.env.VITE_API_URL}/api/images/${imageId}`, {
       headers: { Authorization: localStorage.getItem('auth') },
     });
 

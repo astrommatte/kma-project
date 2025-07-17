@@ -200,7 +200,7 @@ const filteredSubscribers = computed(() => {
 
 async function fetchImages(noteId) {
   try {
-    const res = await axios.get(`http://localhost:8080/api/notes/${noteId}/images`, config);
+    const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/notes/${noteId}/images`, config);
     images.value = res.data;
   } catch (err) {
     console.error('Kunde inte hämta bilder:', err);
@@ -218,7 +218,7 @@ const submitNote = async () => {
     let noteId = null;
     if (editingNote.value) {
       const res = await axios.put(
-        `http://localhost:8080/api/notes/update/${editingNote.value.id}`,
+        `${import.meta.env.VITE_API_URL}/api/notes/update/${editingNote.value.id}`,
         noteForm.value,
         config
       );
@@ -226,7 +226,7 @@ const submitNote = async () => {
       // uppdatera notes-lista osv
     } else {
       const res = await axios.post(
-        'http://localhost:8080/api/notes/create',
+        `${import.meta.env.VITE_API_URL}/api/notes/create`,
         noteForm.value,
         config
       );
@@ -240,7 +240,7 @@ const submitNote = async () => {
       formData.append('file', selectedFile.value);
       formData.append('noteId', noteId);
 
-      await axios.post('http://localhost:8080/api/images/upload', formData, {
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/images/upload`, formData, {
   headers: {
     'Content-Type': 'multipart/form-data',
     Authorization: localStorage.getItem('auth') || '', // <-- hämta härifrån
@@ -263,66 +263,6 @@ const submitNote = async () => {
     console.error('Fel vid spara/redigera:', err);
   }
 };
-
-// const onFileSelect = (event) => {
-//   noteForm.value.images = event.files
-// }
-
-// const onFileChange = (event) => {
-//   noteForm.value.images = Array.from(event.target.files)
-// }
-
-//Submit MED bilder
-// const submitNote = async () => {
-//   try {
-//     // 1. Konvertera alla bilder till Base64-strängar
-//     const base64Images = await Promise.all(
-//       noteForm.value.images.map(file => {
-//         return new Promise((resolve, reject) => {
-//           const reader = new FileReader();
-//           reader.onload = () => {
-//             const base64 = reader.result.split(',')[1];
-//             resolve({
-//               fileName: file.name,
-//               fileType: file.type,
-//               data: base64
-//             });
-//           };
-//           reader.onerror = reject;
-//           reader.readAsDataURL(file);
-//         });
-//       })
-//     );
-
-//     // 2. Skapa payload som vanlig JSON
-//     const payload = {
-//       title: noteForm.value.title,
-//       content: noteForm.value.content,
-//       images: base64Images // 👈 detta är listan du nyss skapat
-//     };
-
-//     // 3. Skicka som vanlig JSON (glöm inte auth-header om du behöver)
-//     const res = await axios.post('http://localhost:8080/api/notes/create', payload, {
-//       headers: {
-//         'Content-Type': 'application/json',
-//         Authorization: localStorage.getItem('auth') // t.ex. "Basic xxxx"
-//       }
-//     });
-
-//     // 4. Efter lyckad save
-//     notes.value.push(res.data);
-//     noteForm.value.title = '';
-//     noteForm.value.content = '';
-//     noteForm.value.images = [];
-//     showNoteForm.value = false;
-//   } catch (err) {
-//     console.error('Fel vid spara:', err);
-//   }
-// };
-
-
-
-
 
 const createNote = () => {
   noteForm.value = { title: '', content: '', images: [] }
@@ -356,7 +296,7 @@ const cancelEdit = () => {
 
 const deleteNote = async id => {
   try {
-    await axios.delete(`http://localhost:8080/api/notes/${id}`, config)
+    await axios.delete(`${import.meta.env.VITE_API_URL}/api/notes/${id}`, config)
     notes.value = notes.value.filter(n => n.id !== id)
   } catch (err) {
     console.error('Fel vid borttagning:', err)
@@ -417,7 +357,7 @@ const submitSubForm = async () => {
     if (selectedSub.value) {
       // Uppdatera subscriber
       const res = await axios.put(
-        `http://localhost:8080/api/subscribers/update/${selectedSub.value.id}`,
+        `${import.meta.env.VITE_API_URL}/subscribers/update/${selectedSub.value.id}`,
         subForm.value,
         config
       )
@@ -428,7 +368,7 @@ const submitSubForm = async () => {
     } else {
       // Skapa ny subscriber (backend sätter ägaren automatiskt via principal)
       const res = await axios.post(
-        'http://localhost:8080/api/subscribers/create',
+        `${import.meta.env.VITE_API_URL}/api/subscribers/create`,
         subForm.value,
         config
       )
@@ -445,7 +385,7 @@ const submitSubForm = async () => {
 
 const fetchSubscribers = async () => {
   try {
-    const res = await axios.get('http://localhost:8080/api/subscribers/', config)
+    const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/subscribers/`, config)
     subscribers.value = res.data
   } catch (err) {
     console.error('Kunde inte hämta subscribers:', err)
@@ -454,7 +394,7 @@ const fetchSubscribers = async () => {
 
 const fetchNotes = async () => {
   try {
-    const res = await axios.get('http://localhost:8080/api/notes/all', config)
+    const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/notes/all`, config)
     notes.value = res.data
   } catch (err) {
     console.error('Kunde inte hämta anteckningar:', err)
@@ -463,7 +403,7 @@ const fetchNotes = async () => {
 
 const deleteSubscriber = async (subscriber) => {
   try {
-    await axios.delete(`http://localhost:8080/api/subscribers/delete/${subscriber.id}`, config)
+    await axios.delete(`${import.meta.env.VITE_API_URL}/api/subscribers/delete/${subscriber.id}`, config)
     subscribers.value = subscribers.value.filter(s => s.id !== subscriber.id)
   } catch (err) {
     console.error('Kunde inte ta bort subscriber:', err)
@@ -471,18 +411,18 @@ const deleteSubscriber = async (subscriber) => {
 }
 
 onMounted(async () => {
-  const meRes = await axios.get('http://localhost:8080/api/auth/me', config)
+  const meRes = await axios.get(`${import.meta.env.VITE_API_URL}/api/auth/me`, config)
   currentUser.value = meRes.data
 
-  const usersRes = await axios.get('http://localhost:8080/api/users/', config)
+  const usersRes = await axios.get(`${import.meta.env.VITE_API_URL}/api/users/`, config)
   users.value = usersRes.data
 
-  const subsRes = await axios.get('http://localhost:8080/api/subscribers/', config)
+const subsRes = await axios.get(`${import.meta.env.VITE_API_URL}/api/subscribers/`, config)
   subscribers.value = subsRes.data
   console.log('Subscribers från API:', subsRes.data)
 
 
-  const notesRes = await axios.get('http://localhost:8080/api/notes/all', config)
+  const notesRes = await axios.get(`${import.meta.env.VITE_API_URL}/api/notes/all`, config)
   notes.value = notesRes.data
   console.log('NOTES från API:', notesRes.data)
 
