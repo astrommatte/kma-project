@@ -23,7 +23,6 @@ public class Image {
     private String publicId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "note_id")
     private Note note;
 }
 
