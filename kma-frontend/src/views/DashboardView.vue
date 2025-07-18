@@ -151,7 +151,7 @@ import Navbar from '@/components/Navbar.vue'
 import SubscriberList from '@/components/SubscriberList.vue'
 import NotesList from '@/components/NotesList.vue'
 import { Dialog } from 'primevue'
-import { hideLoading } from '@/stores/loadingStore'
+import { hideLoading, showLoading } from '@/stores/loadingStore'
 
 const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8080'
 
@@ -239,6 +239,7 @@ const submitNote = async () => {
       notes.value.push(res.data);
     }
 
+
     // 2. Om fil valts, ladda upp bilden kopplad till noteId
     if (selectedFile.value) {
       const formData = new FormData();
@@ -246,30 +247,30 @@ const submitNote = async () => {
       formData.append('noteId', noteId);
 
       await axios.post(`${apiUrl}/api/images/upload`, formData, {
-  headers: {
-    'Content-Type': 'multipart/form-data',
-    Authorization: localStorage.getItem('auth') || '', // <-- hämta härifrån
-  },
-});
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      Authorization: localStorage.getItem('auth') || '', // <-- hämta härifrån
+    },
+    });
 
 
-      selectedFile.value = null;
-    }
+          selectedFile.value = null;
+        }
 
-    // Rensa formulär och stäng dialog
-    noteForm.value.title = '';
-    noteForm.value.content = '';
-    showNoteForm.value = false;
-    editingNote.value = null;
+        // Rensa formulär och stäng dialog
+        noteForm.value.title = '';
+        noteForm.value.content = '';
+        showNoteForm.value = false;
+        editingNote.value = null;
 
-    await fetchNotes(); // hämta om noteringar
+        await fetchNotes(); // hämta om noteringar
 
-  } catch (err) {
-    console.error('Fel vid spara/redigera:', err);
-  } finally {
-    hideLoading()
-  }
-};
+      } catch (err) {
+        console.error('Fel vid spara/redigera:', err);
+      } finally {
+        hideLoading()
+      }
+    };
 
 const createNote = () => {
   noteForm.value = { title: '', content: '', images: [] }

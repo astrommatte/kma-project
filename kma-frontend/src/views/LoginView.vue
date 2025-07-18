@@ -44,7 +44,6 @@ const error = ref(null)
 const isRegistering = ref(false)
 const router = useRouter()
 const allowRegister = ref(true)
-const loading = ref(false)
 
 const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8080'
 
