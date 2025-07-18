@@ -1,5 +1,6 @@
 package com.kma_backend.kma_backend.note;
 
+import com.cloudinary.Cloudinary;
 import com.kma_backend.kma_backend.image.Image;
 import com.kma_backend.kma_backend.mapper.DtoMapper;
 import com.kma_backend.kma_backend.user.User;
@@ -13,6 +14,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +23,7 @@ public class NoteService {
     private final NoteRepository noteRepo;
     private final UserRepository userRepo;
     private final DtoMapper dtoMapper;
+    private final Cloudinary cloudinary;
 
     public NoteDTO createNote(CreateNoteDTO dto, String userEmail) {
         User user = userRepo.findByEmail(userEmail)
@@ -62,19 +65,19 @@ public class NoteService {
             throw new RuntimeException("You are not the owner of this note");
         }
 
-        // Ta bort bildfilerna först – innan note tas bort
+        // Radera bilder från Cloudinary
         for (Image image : note.getImages()) {
             try {
-                Path path = Paths.get(image.getFilePath());
-                Files.deleteIfExists(path);
+                cloudinary.uploader().destroy(image.getPublicId(), Map.of());
             } catch (IOException e) {
-                System.err.println("Kunde inte ta bort fil från disk: " + image.getFilePath());
+                System.err.println("Kunde inte ta bort bild från Cloudinary: " + image.getPublicId());
             }
         }
 
-        // Sen tas noten + bilder bort från databasen (via cascade + orphanRemoval)
+        // Radera noten och bilder från DB (via cascade)
         noteRepo.delete(note);
     }
+
 
 
 
