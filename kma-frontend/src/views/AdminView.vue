@@ -63,7 +63,7 @@
     password: ''
   })
   
-  const apiUrl = import.meta.env.VITE_API_URL;
+  const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8080'
 
   const authHeader = localStorage.getItem('auth')
   const config = { headers: { Authorization: authHeader } }

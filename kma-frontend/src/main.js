@@ -17,6 +17,7 @@ import ConfirmationService from 'primevue/confirmationservice'
 import Checkbox from 'primevue/checkbox'
 import Dialog from 'primevue/dialog'
 import FileUpload from 'primevue/fileupload'
+import ProgressSpinner from 'primevue/progressspinner';
 
 import 'primeicons/primeicons.css'
 
@@ -40,5 +41,6 @@ app.component('ConfirmDialog', ConfirmDialog)
 app.component('Checkbox', Checkbox)
 app.component('Dialog', Dialog)
 app.component('FileUpload', FileUpload)
+app.component('ProgressSpinner', ProgressSpinner)
 
 app.mount('#app')

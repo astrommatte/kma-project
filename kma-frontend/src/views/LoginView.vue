@@ -1,5 +1,5 @@
 <template>
-
+  <ProgressSpinner v-if="loading" style="width: 50px; height: 50px;" strokeWidth="4" />
   <div class="login-container">
     <h2>{{ isRegistering ? 'Skapa konto' : 'Logga in' }}</h2>
 
@@ -44,8 +44,9 @@ const error = ref(null)
 const isRegistering = ref(false)
 const router = useRouter()
 const allowRegister = ref(true)
+const loading = ref(false)
 
-const apiUrl = import.meta.env.VITE_API_URL;
+const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8080'
 
 onMounted(() => {
   const stored = localStorage.getItem('allowRegister')
@@ -59,7 +60,6 @@ const toggleMode = () => {
 
 const handleSubmit = async () => {
   error.value = null
-
   if (isRegistering.value) {
     // Registrering
     try {
@@ -81,6 +81,7 @@ const handleSubmit = async () => {
 
 const login = async () => {
   try {
+    loading.value = true;
     const authHeader = 'Basic ' + btoa(`${email.value}:${password.value}`)
     await axios.get(`${apiUrl}/api/auth/me`, {
       headers: { Authorization: authHeader }
@@ -91,6 +92,7 @@ const login = async () => {
   } catch (err) {
     error.value = 'Felaktig e-post eller lösenord'
   }
+  loading.value = false;
 }
 </script>
 
