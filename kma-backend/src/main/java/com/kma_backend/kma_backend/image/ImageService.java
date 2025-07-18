@@ -43,7 +43,8 @@ public class ImageService {
         image.setPublicId(publicId);
         image.setNote(note);
 
-        // Viktigt: lägg inte till image i note.getImages() om du inte sparar note efteråt!
+        note.getImages().add(image);
+        noteRepository.save(note); // spara note för att uppdatera listan
 
         Image saved = imageRepository.save(image);
         System.out.println("Image saved with id: " + saved.getId());
