@@ -1,5 +1,4 @@
 <template>
-  <ProgressSpinner v-if="loading" style="width: 50px; height: 50px;" strokeWidth="4" />
   <div class="login-container">
     <h2>{{ isRegistering ? 'Skapa konto' : 'Logga in' }}</h2>
 
@@ -35,6 +34,7 @@ import axios from 'axios'
 import { useRouter } from 'vue-router'
 
 import Button from 'primevue/button'
+import { hideLoading, showLoading } from '@/stores/loadingStore'
 
 const firstName = ref('')
 const lastName = ref('')
@@ -63,6 +63,7 @@ const handleSubmit = async () => {
   if (isRegistering.value) {
     // Registrering
     try {
+      showLoading()
       await axios.post(`${apiUrl}/api/users/create`, {
         firstName: firstName.value,
         lastName: lastName.value,
@@ -73,6 +74,8 @@ const handleSubmit = async () => {
       await login()
     } catch (err) {
       error.value = err.response?.data || 'Fel vid registrering'
+    } finally {
+      hideLoading()
     }
   } else {
     await login()
@@ -81,7 +84,7 @@ const handleSubmit = async () => {
 
 const login = async () => {
   try {
-    loading.value = true;
+    showLoading()
     const authHeader = 'Basic ' + btoa(`${email.value}:${password.value}`)
     await axios.get(`${apiUrl}/api/auth/me`, {
       headers: { Authorization: authHeader }
@@ -91,8 +94,9 @@ const login = async () => {
     router.push('/dashboard')
   } catch (err) {
     error.value = 'Felaktig e-post eller lösenord'
+  } finally {
+    hideLoading()
   }
-  loading.value = false;
 }
 </script>
 

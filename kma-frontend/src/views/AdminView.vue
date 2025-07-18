@@ -50,6 +50,7 @@
   import axios from 'axios'
   import UsersList from '@/components/UserList.vue'
   import { InputText } from 'primevue'
+  import { showLoading, hideLoading } from '@/stores/loadingStore'
 
   const showForm = ref(false)
   const users = ref([])
@@ -76,8 +77,16 @@
     if (stored !== null) {
       allowRegister.value = stored === 'true'
     }
-    const meRes = await axios.get(`${apiUrl}/api/auth/me`, config)
-    currentUser.value = meRes.data
+    try{
+      showLoading()
+      const meRes = await axios.get(`${apiUrl}/api/auth/me`, config)
+      currentUser.value = meRes.data
+    } catch{
+      console.log('')
+    } finally {
+      hideLoading()
+    }
+
   
     const res = await axios.get(`${apiUrl}/api/users/`, config)
     users.value = res.data
@@ -110,6 +119,7 @@
     try {
       if (selectedUser.value) {
         // Update
+        showLoading()
         if (form.value.password && form.value.password.length > 0) {
          await changePassword(selectedUser.value.id, form.value.password)
         }
@@ -119,6 +129,7 @@
         users.value[index] = updated
       } else {
         // Create
+        showLoading()
         const res = await axios.post(`${apiUrl}/api/users/create`, form.value, config)
         users.value.push(res.data)
         showForm.value = false
@@ -126,15 +137,20 @@
       cancelEdit()
     } catch (err) {
       console.error('Fel vid skapa/redigera användare:', err)
+    } finally {
+      hideLoading()
     }
   }
   
   const deleteUser = async (id) => {
     try {
+      showLoading()
       await axios.delete(`${apiUrl}/api/users/delete/${id}`, config)
       users.value = users.value.filter(u => u.id !== id)
     } catch (err) {
       console.error('Fel vid borttagning:', err)
+    } finally{
+      hideLoading()
     }
   }
 

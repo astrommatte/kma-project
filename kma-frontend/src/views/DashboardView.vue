@@ -151,6 +151,7 @@ import Navbar from '@/components/Navbar.vue'
 import SubscriberList from '@/components/SubscriberList.vue'
 import NotesList from '@/components/NotesList.vue'
 import { Dialog } from 'primevue'
+import { hideLoading } from '@/stores/loadingStore'
 
 const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8080'
 
@@ -217,6 +218,7 @@ function onFileSelected(event) {
 const submitNote = async () => {
   try {
     // 1. Spara eller uppdatera noten som vanligt (exempel från din kod)
+    showLoading()
     let noteId = null;
     if (editingNote.value) {
       const res = await axios.put(
@@ -227,6 +229,7 @@ const submitNote = async () => {
       noteId = res.data.id;
       // uppdatera notes-lista osv
     } else {
+      showLoading()
       const res = await axios.post(
         `${apiUrl}/api/notes/create`,
         noteForm.value,
@@ -263,6 +266,8 @@ const submitNote = async () => {
 
   } catch (err) {
     console.error('Fel vid spara/redigera:', err);
+  } finally {
+    hideLoading()
   }
 };
 
@@ -358,6 +363,7 @@ const submitSubForm = async () => {
   try {
     if (selectedSub.value) {
       // Uppdatera subscriber
+      showLoading()
       const res = await axios.put(
         `${apiUrl}/api/subscribers/update/${selectedSub.value.id}`,
         subForm.value,
@@ -366,9 +372,9 @@ const submitSubForm = async () => {
       const updated = res.data
       const index = subscribers.value.findIndex(s => s.id === updated.id)
       if (index !== -1) subscribers.value[index] = updated
-      //await fetchSubscribers()
     } else {
       // Skapa ny subscriber (backend sätter ägaren automatiskt via principal)
+      showLoading()
       const res = await axios.post(
         `${apiUrl}/api/subscribers/create`,
         subForm.value,
@@ -382,33 +388,44 @@ const submitSubForm = async () => {
     cancelSubEdit()
   } catch (err) {
     console.error('Fel vid skapa/redigera subscriber:', err)
+  } finally {
+    hideLoading()
   }
 }
 
 const fetchSubscribers = async () => {
   try {
+    showLoading()
     const res = await axios.get(`${apiUrl}/api/subscribers/`, config)
     subscribers.value = res.data
   } catch (err) {
     console.error('Kunde inte hämta subscribers:', err)
+  } finally {
+    hideLoading()
   }
 }
 
 const fetchNotes = async () => {
   try {
+    showLoading()
     const res = await axios.get(`${apiUrl}/api/notes/all`, config)
     notes.value = res.data
   } catch (err) {
     console.error('Kunde inte hämta anteckningar:', err)
+  } finally {
+    hideLoading()
   }
 }
 
 const deleteSubscriber = async (subscriber) => {
   try {
+    showLoading()
     await axios.delete(`${apiUrl}/api/subscribers/delete/${subscriber.id}`, config)
     subscribers.value = subscribers.value.filter(s => s.id !== subscriber.id)
   } catch (err) {
     console.error('Kunde inte ta bort subscriber:', err)
+  } finally {
+    hideLoading()
   }
 }
 

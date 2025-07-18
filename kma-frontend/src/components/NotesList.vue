@@ -114,6 +114,7 @@ import utc from 'dayjs/plugin/utc'
 import timezone from 'dayjs/plugin/timezone'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import axios from 'axios'
+import { hideLoading, showLoading } from '@/stores/loadingStore'
 
 dayjs.extend(utc)
 dayjs.extend(timezone)
@@ -177,6 +178,7 @@ const deleteImage = async (imageId, note) => {
   if (!window.confirm('Är du säker på att du vill ta bort denna bild?')) return;
 
   try {
+    showLoading()
     await axios.delete(`${apiUrl}/api/images/${imageId}`, {
       headers: { Authorization: localStorage.getItem('auth') },
     });
@@ -186,6 +188,8 @@ const deleteImage = async (imageId, note) => {
     if (index !== -1) note.images.splice(index, 1);
   } catch (err) {
     console.error('Kunde inte ta bort bilden:', err);
+  } finally {
+    hideLoading()
   }
 };
 
