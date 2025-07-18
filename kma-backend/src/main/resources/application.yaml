@@ -15,9 +15,12 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true
 app:
-  image:
-    upload-dir: uploads/
   admin-email: ${ADMIN_EMAIL}
+
+cloudinary:
+  cloud-name: ${CLOUD_NAME}
+  api-key: ${CLOUD_KEY}
+  api-secret: ${CLOUD_SECRET}
 
 
 logging:

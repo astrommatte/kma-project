@@ -1,6 +1,7 @@
 package com.kma_backend.kma_backend.mapper;
 
 import com.kma_backend.kma_backend.image.Image;
+import com.kma_backend.kma_backend.image.ImageDTO;
 import com.kma_backend.kma_backend.note.Note;
 import com.kma_backend.kma_backend.note.NoteDTO;
 import com.kma_backend.kma_backend.subscriber.Subscriber;
@@ -50,16 +51,21 @@ public class DtoMapper {
         dto.setContent(note.getContent());
         dto.setCreatedAt(note.getCreatedAt());
         dto.setUpdatedAt(note.getUpdatedAt());
-        // Mappa User entity till UserDTO
         dto.setCreatedBy(toUserDto(note.getCreatedBy()));
 
-        List<Long> imageIds = note.getImages()
+        List<ImageDTO> images = note.getImages()
                 .stream()
-                .map(Image::getId)
+                .map(image -> {
+                    ImageDTO imageDTO = new ImageDTO();
+                    imageDTO.setId(image.getId());
+                    imageDTO.setUrl(image.getUrl());  // Eller getUrl() beroende på din entitet
+                    return imageDTO;
+                })
                 .toList();
-        dto.setImageIds(imageIds);
+        dto.setImages(images);
 
         return dto;
     }
+
 }
 

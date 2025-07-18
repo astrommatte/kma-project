@@ -13,11 +13,17 @@ public class Image {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // Det riktiga filnamnet (valfritt)
     private String fileName;
 
-    private String filePath;
+    // URL till bilden hos Cloudinary
+    private String url;
+
+    // Cloudinary public_id, behövs för att kunna radera bilden från Cloudinary
+    private String publicId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "note_id")
     private Note note;
 }
+

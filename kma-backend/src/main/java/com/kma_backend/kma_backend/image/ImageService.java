@@ -1,5 +1,6 @@
 package com.kma_backend.kma_backend.image;
 
+import com.cloudinary.Cloudinary;
 import com.kma_backend.kma_backend.note.Note;
 import com.kma_backend.kma_backend.note.NoteRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,37 +13,31 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Map;
 import java.util.UUID;
 
 
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class ImageService {
 
-    @Value("${app.image.upload-dir}")
-    private String uploadDir;
     private final ImageRepository imageRepository;
     private final NoteRepository noteRepository;
+    private final Cloudinary cloudinary;
 
+    public Image uploadImage(MultipartFile file, Long noteId) throws IOException {
+        Map uploadResult = cloudinary.uploader().upload(file.getBytes(), Map.of());
 
-    public Image saveImage(MultipartFile file, Long noteId) throws IOException {
-        String originalFileName = file.getOriginalFilename();
-        String newFileName = UUID.randomUUID() + "_" + originalFileName;
-        Path targetPath = Paths.get(uploadDir).resolve(newFileName).normalize();
+        String url = (String) uploadResult.get("secure_url");
+        String publicId = (String) uploadResult.get("public_id");
 
-        // Skapa mappen om den inte finns
-        Files.createDirectories(targetPath.getParent());
-
-        // Spara filen
-        Files.copy(file.getInputStream(), targetPath, StandardCopyOption.REPLACE_EXISTING);
-
-        // Koppla till note
         Note note = noteRepository.findById(noteId)
                 .orElseThrow(() -> new IllegalArgumentException("Note not found: " + noteId));
 
         Image image = new Image();
-        image.setFileName(originalFileName);
-        image.setFilePath(targetPath.toString());
+        image.setFileName(file.getOriginalFilename());
+        image.setUrl(url);
+        image.setPublicId(publicId);
         image.setNote(note);
 
         return imageRepository.save(image);
@@ -56,11 +51,15 @@ public class ImageService {
     public void deleteImage(Long id) throws IOException {
         Image image = getImageById(id);
 
-        // Ta bort filen från disk
-        Path path = Paths.get(image.getFilePath());
-        Files.deleteIfExists(path);
+        // Ta bort från Cloudinary
+        try {
+            cloudinary.uploader().destroy(image.getPublicId(), Map.of());
+        } catch (Exception e) {
+            throw new IOException("Failed to delete image from Cloudinary: " + e.getMessage());
+        }
 
         // Ta bort från databasen
         imageRepository.delete(image);
     }
 }
+

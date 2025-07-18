@@ -1,5 +1,6 @@
 package com.kma_backend.kma_backend.image;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -14,41 +15,29 @@ import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/api/images")
+@RequiredArgsConstructor
 public class ImageController {
 
     private final ImageService imageService;
 
-    public ImageController(ImageService imageService) {
-        this.imageService = imageService;
-    }
-
     @PostMapping("/upload")
-    public ResponseEntity<String> uploadImage(
-            @RequestParam("file") MultipartFile file,
-            @RequestParam("noteId") Long noteId) {
+    public ResponseEntity<?> upload(@RequestParam("file") MultipartFile file, @RequestParam("noteId") Long noteId) {
         try {
-            imageService.saveImage(file, noteId);
-            return ResponseEntity.ok("Bilden har sparats.");
+            Image savedImage = imageService.uploadImage(file, noteId);
+            return ResponseEntity.ok(savedImage);
         } catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Fel vid uppladdning: " + e.getMessage());
-        } catch (NoSuchElementException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Note med ID " + noteId + " hittades inte.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Uppladdning misslyckades: " + e.getMessage());
         }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<byte[]> getImage(@PathVariable Long id) throws IOException {
-        Image image = imageService.getImageById(id);
-        Path path = Paths.get(image.getFilePath());
-
-        byte[] data = Files.readAllBytes(path);
-        String contentType = Files.probeContentType(path);
-
-        return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(contentType != null ? contentType : "application/octet-stream"))
-                .body(data);
+    public ResponseEntity<?> getImage(@PathVariable Long id) {
+        try {
+            Image image = imageService.getImageById(id);
+            return ResponseEntity.ok(image);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
     @DeleteMapping("/{id}")
@@ -58,7 +47,7 @@ public class ImageController {
             return ResponseEntity.ok("Bilden har tagits bort.");
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Kunde inte ta bort filen från disk: " + e.getMessage());
+                    .body("Kunde inte ta bort bilden: " + e.getMessage());
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(e.getMessage());

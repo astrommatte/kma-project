@@ -32,28 +32,27 @@
       <p class="mt-2">{{ note.content }}</p>
 
       <!-- Visa alla bilder -->
-      <div v-if="note.imageIds?.length && currentUser" class="mt-3 flex gap-3 flex-wrap">
+      <div v-if="note.images?.length && currentUser" class="mt-3 flex gap-3 flex-wrap">
         <div
-          v-for="id in note.imageIds"
-          :key="id"
+          v-for="image in note.images"
+          :key="image.id"
           class="relative"
           style="display: inline-block;"
         >
           <img
-            :src="`${apiUrl}/api/images/${id}`"
+            :src="image.url"
             alt="Bifogad bild"
             style="max-width: 200px; border-radius: 6px; cursor: pointer;"
-            @click="() => { selectedImage = `${apiUrl}/api/images/${id}` }"
+            @click="() => { selectedImage = image.url }"
           />
           <Button
             v-if="note.createdBy?.id === currentUser.id"
-            @click="deleteImage(id, note)"
+            @click="deleteImage(image.id, note)"
             icon="pi pi-times" severity="danger" variant="text" rounded aria-label="Cancel"
           >
           </Button>
         </div>
       </div>
-
 
       <small class="p-text-secondary block mt-2">
         Skapad: {{ formatDate(note?.createdAt) || 'Okänd' }}<br />
@@ -182,9 +181,9 @@ const deleteImage = async (imageId, note) => {
       headers: { Authorization: localStorage.getItem('auth') },
     });
 
-    // Uppdatera imageIds lokalt
-    const index = note.imageIds.indexOf(imageId);
-    if (index !== -1) note.imageIds.splice(index, 1);
+    // Uppdatera images lokalt
+    const index = note.images.findIndex(img => img.id === imageId);
+    if (index !== -1) note.images.splice(index, 1);
   } catch (err) {
     console.error('Kunde inte ta bort bilden:', err);
   }

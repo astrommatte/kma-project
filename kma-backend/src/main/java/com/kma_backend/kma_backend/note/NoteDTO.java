@@ -1,6 +1,6 @@
 package com.kma_backend.kma_backend.note;
 
-import com.kma_backend.kma_backend.user.User;
+import com.kma_backend.kma_backend.image.ImageDTO;
 import com.kma_backend.kma_backend.user.UserDTO;
 import lombok.Data;
 
@@ -15,5 +15,5 @@ public class NoteDTO {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private UserDTO createdBy;
-    private List<Long> imageIds;
+    private List<ImageDTO> images;
 }
