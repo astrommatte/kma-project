@@ -37,9 +37,6 @@ public class ImageService {
         image.setPublicId(publicId);
         image.setNote(note);
 
-        note.getImages().add(image);
-        noteRepository.save(note); // spara note för att uppdatera listan
-
         Image saved = imageRepository.save(image);
         System.out.println("Image saved with id: " + saved.getId());
         return saved;

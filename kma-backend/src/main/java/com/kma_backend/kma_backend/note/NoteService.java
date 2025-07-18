@@ -5,6 +5,7 @@ import com.kma_backend.kma_backend.image.Image;
 import com.kma_backend.kma_backend.mapper.DtoMapper;
 import com.kma_backend.kma_backend.user.User;
 import com.kma_backend.kma_backend.user.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -78,25 +79,12 @@ public class NoteService {
         noteRepo.delete(note);
     }
 
-
-
-
+    @Transactional
     public List<NoteDTO> getAllNotes() {
         return noteRepo.findAll().stream()
                 .map(dtoMapper::toNoteDto)
                 .toList();
     }
-
-//    public NoteDTO toDto(Note note) {
-//        NoteDTO dto = new NoteDTO();
-//        dto.setId(note.getId());
-//        dto.setTitle(note.getTitle());
-//        dto.setContent(note.getContent());
-//        dto.setCreatedAt(note.getCreatedAt());
-//        dto.setUpdatedAt(note.getUpdatedAt());
-//        dto.setCreatedBy(note.getCreatedBy());
-//        return dto;
-//    }
 
 }
 

@@ -32,13 +32,12 @@ public class ImageController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getImage(@PathVariable Long id) {
-        try {
-            Image image = imageService.getImageById(id);
-            return ResponseEntity.ok(image);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
+    public ResponseEntity<ImageDTO> getImage(@PathVariable Long id) {
+        Image image = imageService.getImageById(id);
+        ImageDTO dto = new ImageDTO();
+        dto.setId(image.getId());
+        dto.setUrl(image.getUrl());
+        return ResponseEntity.ok(dto);
     }
 
     @DeleteMapping("/{id}")
