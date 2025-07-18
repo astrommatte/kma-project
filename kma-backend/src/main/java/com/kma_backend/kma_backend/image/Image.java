@@ -26,4 +26,3 @@ public class Image {
     @JoinColumn(name = "note_id")
     private Note note;
 }
-

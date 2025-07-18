@@ -20,9 +20,9 @@ app:
   admin-email: ${ADMIN_EMAIL}
 
 cloudinary:
-  cloud-name: ${CLOUD_NAME}
-  api-key: ${CLOUD_KEY}
-  api-secret: ${CLOUD_SECRET}
+  cloud-name: ${CLOUDINARY_CLOUD_NAME}
+  api-key: ${CLOUDINARY_API_KEY}
+  api-secret: ${CLOUDINARY_API_SECRET}
 
 
 logging:
