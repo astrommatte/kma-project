@@ -25,7 +25,8 @@ public class ImageController {
         try {
             Image savedImage = imageService.uploadImage(file, noteId);
             return ResponseEntity.ok(savedImage);
-        } catch (IOException e) {
+        } catch (Exception e) {
+            e.printStackTrace();  // Logga full stacktrace i konsolen
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Uppladdning misslyckades: " + e.getMessage());
         }
     }
