@@ -2,6 +2,7 @@ package com.kma_backend.kma_backend.config;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,4 +27,13 @@ public class CloudinaryConfig {
                 "api_secret", apiSecret
         ));
     }
+
+    @PostConstruct
+    public void init() {
+        System.out.println("Cloudinary config loaded:");
+        System.out.println("cloudName = " + cloudName);
+        System.out.println("apiKey = " + apiKey);
+        System.out.println("apiSecret = " + (apiSecret != null ? "***" : "null"));
+    }
+
 }
