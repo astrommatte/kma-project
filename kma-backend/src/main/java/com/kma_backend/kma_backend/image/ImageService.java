@@ -43,11 +43,12 @@ public class ImageService {
         image.setPublicId(publicId);
         image.setNote(note);
 
+        // Viktigt: lägg inte till image i note.getImages() om du inte sparar note efteråt!
+
         Image saved = imageRepository.save(image);
         System.out.println("Image saved with id: " + saved.getId());
         return saved;
     }
-
 
     public Image getImageById(Long id) {
         return imageRepository.findById(id)
