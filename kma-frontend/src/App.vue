@@ -1,6 +1,7 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
 import ConfirmDialog from 'primevue/confirmdialog'
+import { isLoading } from './stores/loadingStore'
 </script>
 
 <template>
@@ -10,10 +11,6 @@ import ConfirmDialog from 'primevue/confirmdialog'
     <ProgressSpinner />
   </div>
 </template>
-
-<script setup>
-import { isLoading } from './stores/loadingStore'
-</script>
 
 <style scoped>
   .overlay-spinner {
