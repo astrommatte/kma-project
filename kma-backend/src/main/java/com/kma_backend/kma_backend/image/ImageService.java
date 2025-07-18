@@ -26,13 +26,16 @@ public class ImageService {
     private final Cloudinary cloudinary;
 
     public Image uploadImage(MultipartFile file, Long noteId) throws IOException {
+        System.out.println("Uploading image, noteId = " + noteId);
         Map uploadResult = cloudinary.uploader().upload(file.getBytes(), Map.of());
+        System.out.println("Upload success, result: " + uploadResult);
 
         String url = (String) uploadResult.get("secure_url");
         String publicId = (String) uploadResult.get("public_id");
 
         Note note = noteRepository.findById(noteId)
                 .orElseThrow(() -> new IllegalArgumentException("Note not found: " + noteId));
+        System.out.println("Found note: " + note.getId());
 
         Image image = new Image();
         image.setFileName(file.getOriginalFilename());
@@ -40,8 +43,11 @@ public class ImageService {
         image.setPublicId(publicId);
         image.setNote(note);
 
-        return imageRepository.save(image);
+        Image saved = imageRepository.save(image);
+        System.out.println("Image saved with id: " + saved.getId());
+        return saved;
     }
+
 
     public Image getImageById(Long id) {
         return imageRepository.findById(id)
