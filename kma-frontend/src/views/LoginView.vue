@@ -3,13 +3,13 @@
     <h2>{{ isRegistering ? 'Skapa konto' : 'Logga in' }}</h2>
 
     <form @submit.prevent="handleSubmit">
-      <input v-model="email" v-tooltip="'Ange din email'" type="email" placeholder="Email" required />
-      <input v-model="password" v-tooltip="'Ange ditt lösenord'" type="password" placeholder="Lösenord" required />
+      <input v-model="email" v-tooltip.focus.top="'Ange din email'" type="email" placeholder="Email" required />
+      <input v-model="password" v-tooltip.focus.top="'Ange ditt lösenord'" type="password" placeholder="Lösenord" required />
 
       <!-- Endast vid registrering -->
       <div v-if="isRegistering">
-        <input v-model="firstName" v-tooltip="'Ange ditt efternamn'" type="text" placeholder="Förnamn" required />
-        <input v-model="lastName" v-tooltip="'Ange ditt förnamn'" type="text" placeholder="Efternamn" required />
+        <input v-model="firstName" v-tooltip.focus.top="'Ange ditt efternamn'" type="text" placeholder="Förnamn" required />
+        <input v-model="lastName" v-tooltip.focus.top="'Ange ditt förnamn'" type="text" placeholder="Efternamn" required />
       </div>
 
       <Button type="submit">{{ isRegistering ? 'Skapa konto' : 'Logga in' }}</Button>
@@ -32,10 +32,10 @@
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
-
 import Button from 'primevue/button'
 import { hideLoading, showLoading } from '@/stores/loadingStore'
-import { showSuccessToast, showErrorToast } from '@/stores/toastStore'
+import { toastStore } from '@/stores/toastStore'
+const { showSuccessToast, showErrorToast } = toastStore()
 
 const firstName = ref('')
 const lastName = ref('')

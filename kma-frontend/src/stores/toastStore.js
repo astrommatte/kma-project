@@ -1,21 +1,28 @@
 import { useToast } from 'primevue/usetoast'
 
-export function showSuccessToast(message = 'Allt gick bra!') {
+export function useToaster() {
   const toast = useToast()
-  toast.add({
-    severity: 'success',
-    summary: 'Klart',
-    detail: message,
-    life: 3000
-  })
-}
 
-export function showErrorToast(message = 'Något gick fel.') {
-  const toast = useToast()
-  toast.add({
-    severity: 'error',
-    summary: 'Fel',
-    detail: message,
-    life: 4000
-  })
+  const showSuccessToast = (msg = 'Klart!') => {
+    toast.add({
+      severity: 'success',
+      summary: 'Success',
+      detail: msg,
+      life: 3000,
+    })
+  }
+
+  const showErrorToast = (msg = 'Något gick fel') => {
+    toast.add({
+      severity: 'error',
+      summary: 'Fel',
+      detail: msg,
+      life: 4000,
+    })
+  }
+
+  return {
+    showSuccessToast,
+    showErrorToast,
+  }
 }

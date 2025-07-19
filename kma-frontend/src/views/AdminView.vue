@@ -20,10 +20,10 @@
           <div v-if="showForm">
             <h2 class="text-xl font-semibold mb-2">{{ selectedUser ? 'Redigera användare' : 'Skapa ny användare' }}</h2>
             <form @submit.prevent="submitForm" class="space-y-2 bg-gray-100 p-4 rounded shadow">
-              <InputText v-model="form.firstName" type="text" placeholder="Förnamn" class="w-full border p-2 rounded" />
-              <InputText v-model="form.lastName" type="text" placeholder="Efternamn" class="w-full border p-2 rounded" />
-              <InputText v-model="form.email" type="email" placeholder="Email" class="w-full border p-2 rounded" />
-              <InputText v-model="form.password" type="password" placeholder="Lösenord" class="w-full border p-2 rounded" />
+              <InputText v-model="form.firstName" v-tooltip.focus.top="'Ange förnamn'" type="text" placeholder="Förnamn" class="w-full border p-2 rounded" />
+              <InputText v-model="form.lastName" v-tooltip.focus.top="'Ange efternamn'" type="text" placeholder="Efternamn" class="w-full border p-2 rounded" />
+              <InputText v-model="form.email" v-tooltip.focus.top="'Ange email'" type="email" placeholder="Email" class="w-full border p-2 rounded" />
+              <InputText v-model="form.password" v-tooltip.focus.top="'Ange lösenord'" type="password" placeholder="Lösenord" class="w-full border p-2 rounded" />
               
               <div class="space-x-2">
                 <Button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">
@@ -51,6 +51,8 @@
   import UsersList from '@/components/UserList.vue'
   import { InputText } from 'primevue'
   import { showLoading, hideLoading } from '@/stores/loadingStore'
+  import { toastStore } from '@/stores/toastStore'
+  const { showSuccessToast, showErrorToast } = toastStore()
 
   const showForm = ref(false)
   const users = ref([])
@@ -107,10 +109,9 @@
         }
       }
     )
-    alert('Lösenordet har uppdaterats!')
+    showSuccessToast('Lösenordet har uppdaterats!')
   } catch (err) {
-    console.error('Fel vid ändring av lösenord:', err)
-    alert('Det gick inte att ändra lösenordet.')
+    showErrorToast('Det gick inte att ändra lösenordet.')
   }
 }
 
@@ -127,16 +128,18 @@
         const updated = res.data
         const index = users.value.findIndex(u => u.id === updated.id)
         users.value[index] = updated
+        showSuccessToast('Användare uppdaterad!')
       } else {
         // Create
         showLoading()
         const res = await axios.post(`${apiUrl}/api/users/create`, form.value, config)
         users.value.push(res.data)
         showForm.value = false
+        showSuccessToast('Ny användare skapad!')
       }
       cancelEdit()
     } catch (err) {
-      console.error('Fel vid skapa/redigera användare:', err)
+      showErrorToast('Fel vid skapa/redigera användare')
     } finally {
       hideLoading()
     }
@@ -147,8 +150,9 @@
       showLoading()
       await axios.delete(`${apiUrl}/api/users/delete/${id}`, config)
       users.value = users.value.filter(u => u.id !== id)
+      showSuccessToast('Användare borttagen!')
     } catch (err) {
-      console.error('Fel vid borttagning:', err)
+      showErrorToast('Fel vid borttagning av användare')
     } finally{
       hideLoading()
     }

@@ -180,7 +180,6 @@ const deleteImage = async (imageId, note) => {
   if (!window.confirm('Är du säker på att du vill ta bort denna bild?')) return;
 
   try {
-    showLoading()
     await axios.delete(`${apiUrl}/api/images/${imageId}`, {
       headers: { Authorization: localStorage.getItem('auth') },
     });
@@ -189,9 +188,7 @@ const deleteImage = async (imageId, note) => {
     const index = note.images.findIndex(img => img.id === imageId);
     if (index !== -1) note.images.splice(index, 1);
   } catch (err) {
-    console.error('Kunde inte ta bort bilden:', err);
-  } finally {
-    hideLoading()
+
   }
 };
 

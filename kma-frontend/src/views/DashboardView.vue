@@ -41,17 +41,18 @@
 
         <form @submit.prevent="submitSubForm" class="p-fluid formgrid grid">
           <div class="field col-12 md:col-4">
-            <InputText v-model="subForm.firstName" placeholder="Förnamn" />
+            <InputText v-model="subForm.firstName" v-tooltip.focus.top="'Ange förnamn'" placeholder="Förnamn" />
           </div>
           <div class="field col-12 md:col-4">
-            <InputText v-model="subForm.lastName" placeholder="Efternamn" />
+            <InputText v-model="subForm.lastName" v-tooltip.focus.top="'Ange efternamn'" placeholder="Efternamn" />
           </div>
           <div class="field col-12 md:col-4">
-            <InputText v-model="subForm.email" placeholder="Email" />
+            <InputText v-model="subForm.email" v-tooltip.focus.top="'Ange email'" placeholder="Email" />
           </div>
 
           <Select
               v-model="subForm.type"
+              v-tooltip.focus.top="'Välj vilken typ kunden är'"
               :options="subscriberTypes"
               optionLabel="label"
               optionValue="value"
@@ -61,6 +62,7 @@
           <div v-if="selectedSub" class="field col-12 md:col-6">
             <Select
               v-model="subForm.newOwnerEmail"
+              v-tooltip.focus.top="'Välj en ny ägare'"
               :options="users"
               optionLabel="firstName"
               optionValue="email"
@@ -114,10 +116,10 @@
     >
       <form @submit.prevent="submitNote" class="p-fluid">
         <div class="field mb-3">
-          <InputText v-model="noteForm.title" placeholder="Titel" required />
+          <InputText v-model="noteForm.title" v-tooltip.focus.top="'Ange titel till anteckningen'" placeholder="Titel" required />
         </div>
         <div class="field mb-3">
-          <Textarea v-model="noteForm.content" placeholder="Innehåll" rows="5" required />
+          <Textarea v-model="noteForm.content" v-tooltip.focus.top="'Ange innehållet i anteckningen'" placeholder="Innehåll" rows="5" required />
         </div>
           <!-- Ny: fil-upload -->
         <div class="field mb-3">
@@ -152,7 +154,8 @@ import SubscriberList from '@/components/SubscriberList.vue'
 import NotesList from '@/components/NotesList.vue'
 import { Dialog } from 'primevue'
 import { hideLoading, showLoading } from '@/stores/loadingStore'
-import { showSuccessToast, showErrorToast } from '@/stores/toastStore'
+import { toastStore } from '@/stores/toastStore'
+const { showSuccessToast, showErrorToast } = toastStore()
 
 const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8080'
 
@@ -307,11 +310,14 @@ const cancelEdit = () => {
 
 const deleteNote = async id => {
   try {
+    showLoading()
     await axios.delete(`${apiUrl}/api/notes/${id}`, config)
     notes.value = notes.value.filter(n => n.id !== id)
     showSuccessToast('Tagit bort anteckningen')
   } catch (err) {
     showErrorToast('Gick inte att ta bort anteckning')
+  } finally {
+    hideLoading()
   }
 }
 
