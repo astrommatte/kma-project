@@ -2,11 +2,13 @@
 import { RouterLink, RouterView } from 'vue-router'
 import ConfirmDialog from 'primevue/confirmdialog'
 import { isLoading } from './stores/loadingStore'
+import { Toast } from 'primevue'
 </script>
 
 <template>
   <RouterView />
   <ConfirmDialog />
+  <Toast />
   <div v-if="isLoading" class="overlay-spinner">
     <ProgressSpinner />
   </div>

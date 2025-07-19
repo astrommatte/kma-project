@@ -3,13 +3,13 @@
     <h2>{{ isRegistering ? 'Skapa konto' : 'Logga in' }}</h2>
 
     <form @submit.prevent="handleSubmit">
-      <input v-model="email" type="email" placeholder="Email" required />
-      <input v-model="password" type="password" placeholder="Lösenord" required />
+      <input v-model="email" v-tooltip="'Ange din email'" type="email" placeholder="Email" required />
+      <input v-model="password" v-tooltip="'Ange ditt lösenord'" type="password" placeholder="Lösenord" required />
 
       <!-- Endast vid registrering -->
       <div v-if="isRegistering">
-        <input v-model="firstName" type="text" placeholder="Förnamn" required />
-        <input v-model="lastName" type="text" placeholder="Efternamn" required />
+        <input v-model="firstName" v-tooltip="'Ange ditt efternamn'" type="text" placeholder="Förnamn" required />
+        <input v-model="lastName" v-tooltip="'Ange ditt förnamn'" type="text" placeholder="Efternamn" required />
       </div>
 
       <Button type="submit">{{ isRegistering ? 'Skapa konto' : 'Logga in' }}</Button>
@@ -35,6 +35,7 @@ import { useRouter } from 'vue-router'
 
 import Button from 'primevue/button'
 import { hideLoading, showLoading } from '@/stores/loadingStore'
+import { showSuccessToast, showErrorToast } from '@/stores/toastStore'
 
 const firstName = ref('')
 const lastName = ref('')
@@ -62,7 +63,6 @@ const handleSubmit = async () => {
   if (isRegistering.value) {
     // Registrering
     try {
-      showLoading()
       await axios.post(`${apiUrl}/api/users/create`, {
         firstName: firstName.value,
         lastName: lastName.value,
@@ -72,10 +72,8 @@ const handleSubmit = async () => {
       // Logga in automatiskt efter registrering
       await login()
     } catch (err) {
-      error.value = err.response?.data || 'Fel vid registrering'
-    } finally {
-      hideLoading()
-    }
+      
+    } 
   } else {
     await login()
   }
@@ -91,8 +89,9 @@ const login = async () => {
 
     localStorage.setItem('auth', authHeader)
     router.push('/dashboard')
+    showSuccessToast('Loggar in!')
   } catch (err) {
-    error.value = 'Felaktig e-post eller lösenord'
+    showErrorToast('Felaktigt lösenord eller email.')
   } finally {
     hideLoading()
   }

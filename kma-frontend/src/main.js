@@ -18,6 +18,8 @@ import Checkbox from 'primevue/checkbox'
 import Dialog from 'primevue/dialog'
 import FileUpload from 'primevue/fileupload'
 import ProgressSpinner from 'primevue/progressspinner';
+import Tooltip from 'primevue/tooltip';
+import ToastService from 'primevue/toastservice';
 
 import 'primeicons/primeicons.css'
 
@@ -31,6 +33,7 @@ app.use(PrimeVue, {
     }
 });
 app.use(ConfirmationService)
+app.use(ToastService);
 
 app.component('Button', Button);
 app.component('Select', Select);
@@ -42,5 +45,7 @@ app.component('Checkbox', Checkbox)
 app.component('Dialog', Dialog)
 app.component('FileUpload', FileUpload)
 app.component('ProgressSpinner', ProgressSpinner)
+
+app.directive('tooltip', Tooltip);
 
 app.mount('#app')

@@ -152,6 +152,7 @@ import SubscriberList from '@/components/SubscriberList.vue'
 import NotesList from '@/components/NotesList.vue'
 import { Dialog } from 'primevue'
 import { hideLoading, showLoading } from '@/stores/loadingStore'
+import { showSuccessToast, showErrorToast } from '@/stores/toastStore'
 
 const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8080'
 
@@ -227,6 +228,7 @@ const submitNote = async () => {
         config
       );
       noteId = res.data.id;
+      showSuccessToast('Anteckning skapad!')
       // uppdatera notes-lista osv
     } else {
       showLoading()
@@ -237,6 +239,7 @@ const submitNote = async () => {
       );
       noteId = res.data.id;
       notes.value.push(res.data);
+      showSuccessToast('Anteckning uppdaterad!')
     }
 
 
@@ -266,7 +269,7 @@ const submitNote = async () => {
         await fetchNotes(); // hämta om noteringar
 
       } catch (err) {
-        console.error('Fel vid spara/redigera:', err);
+        showErrorToast('Fel vid spara/redigera')
       } finally {
         hideLoading()
       }
@@ -306,8 +309,9 @@ const deleteNote = async id => {
   try {
     await axios.delete(`${apiUrl}/api/notes/${id}`, config)
     notes.value = notes.value.filter(n => n.id !== id)
+    showSuccessToast('Tagit bort anteckningen')
   } catch (err) {
-    console.error('Fel vid borttagning:', err)
+    showErrorToast('Gick inte att ta bort anteckning')
   }
 }
 
@@ -373,6 +377,7 @@ const submitSubForm = async () => {
       const updated = res.data
       const index = subscribers.value.findIndex(s => s.id === updated.id)
       if (index !== -1) subscribers.value[index] = updated
+      showSuccessToast('Uppdaterat kund!')
     } else {
       // Skapa ny subscriber (backend sätter ägaren automatiskt via principal)
       showLoading()
@@ -384,11 +389,12 @@ const submitSubForm = async () => {
       subscribers.value.push(res.data)
       showSubForm.value = false
       await fetchSubscribers()
+      showSuccessToast('Skapat en ny kund!')
     }
 
     cancelSubEdit()
   } catch (err) {
-    console.error('Fel vid skapa/redigera subscriber:', err)
+    showErrorToast('Fel vid skapa/redigera subscriber')
   } finally {
     hideLoading()
   }
@@ -399,8 +405,9 @@ const fetchSubscribers = async () => {
     showLoading()
     const res = await axios.get(`${apiUrl}/api/subscribers/`, config)
     subscribers.value = res.data
+    showSuccessToast('Följare hämtad!')
   } catch (err) {
-    console.error('Kunde inte hämta subscribers:', err)
+    showErrorToast('Gick inte att hämta följare')
   } finally {
     hideLoading()
   }
@@ -411,8 +418,9 @@ const fetchNotes = async () => {
     showLoading()
     const res = await axios.get(`${apiUrl}/api/notes/all`, config)
     notes.value = res.data
+    showSuccessToast('Anteckningar hämtad!')
   } catch (err) {
-    console.error('Kunde inte hämta anteckningar:', err)
+    showErrorToast('Kunde inte hämta anteckningar')
   } finally {
     hideLoading()
   }
@@ -423,8 +431,9 @@ const deleteSubscriber = async (subscriber) => {
     showLoading()
     await axios.delete(`${apiUrl}/api/subscribers/delete/${subscriber.id}`, config)
     subscribers.value = subscribers.value.filter(s => s.id !== subscriber.id)
+    showSuccessToast('Följare borttagen!')
   } catch (err) {
-    console.error('Kunde inte ta bort subscriber:', err)
+    showErrorToast('Kunde inte ta bort följare')
   } finally {
     hideLoading()
   }

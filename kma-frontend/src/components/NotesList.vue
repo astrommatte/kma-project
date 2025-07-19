@@ -130,7 +130,7 @@ const props = defineProps({
 
 const emit = defineEmits(['create-note', 'edit-note', 'delete-note'])
 
-const apiUrl = import.meta.env.VITE_API_URL;
+const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8080';
 const confirm = useConfirm()
 
 const sortedNotes = computed(() => {
@@ -153,11 +153,13 @@ const dialogVisible = computed({
 
 function formatDate(dateString) {
   if (!dateString) return 'Okänd';
-  return dayjs.utc(dateString).format('YYYY-MM-DD HH:mm');
+  return dayjs.utc(dateString).tz('Europe/Stockholm').format('YYYY-MM-DD HH:mm');
 }
 
 function fromNow(dateString) {
-  return dateString ? dayjs(dateString).fromNow() : 'okänt'
+  return dateString
+    ? dayjs.utc(dateString).tz('Europe/Stockholm').fromNow()
+    : 'okänt';
 }
 
 const confirmDelete = (note) => {
