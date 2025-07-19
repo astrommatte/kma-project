@@ -221,7 +221,6 @@ function onFileSelected(event) {
 
 const submitNote = async () => {
   try {
-    // 1. Spara eller uppdatera noten som vanligt (exempel från din kod)
     showLoading()
     let noteId = null;
     if (editingNote.value) {
@@ -231,8 +230,8 @@ const submitNote = async () => {
         config
       );
       noteId = res.data.id;
-      showSuccessToast('Anteckning skapad!')
-      // uppdatera notes-lista osv
+      showSuccessToast('Anteckning uppdaterad!')
+
     } else {
       showLoading()
       const res = await axios.post(
@@ -242,7 +241,7 @@ const submitNote = async () => {
       );
       noteId = res.data.id;
       notes.value.push(res.data);
-      showSuccessToast('Anteckning uppdaterad!')
+      showSuccessToast('Anteckning skapad!')
     }
 
 
@@ -400,7 +399,7 @@ const submitSubForm = async () => {
 
     cancelSubEdit()
   } catch (err) {
-    showErrorToast('Fel vid skapa/redigera subscriber')
+    showErrorToast('Fel vid skapa/redigera kund')
   } finally {
     hideLoading()
   }
@@ -435,9 +434,9 @@ const deleteSubscriber = async (subscriber) => {
     showLoading()
     await axios.delete(`${apiUrl}/api/subscribers/delete/${subscriber.id}`, config)
     subscribers.value = subscribers.value.filter(s => s.id !== subscriber.id)
-    showSuccessToast('Följare borttagen!')
+    showSuccessToast('Kund borttagen!')
   } catch (err) {
-    showErrorToast('Kunde inte ta bort följare')
+    showErrorToast('Fel vid borttagning av kund!')
   } finally {
     hideLoading()
   }
@@ -450,27 +449,15 @@ onMounted(async () => {
   try{
     const usersRes = await axios.get(`${apiUrl}/api/users/`, config)
     users.value = usersRes.data
-    showSuccessToast('Användare hämtad!')
-  } catch (err) {
-    showErrorToast('Gick inte att hämta användare')
-  }
 
-  try{
     const subsRes = await axios.get(`${apiUrl}/api/subscribers/`, config)
     subscribers.value = subsRes.data
-    showSuccessToast('Följare hämtad!')
-  } catch (err) {
-    showErrorToast('Gick inte att hämta följare')
-  }
 
-  try{
     const notesRes = await axios.get(`${apiUrl}/api/notes/all`, config)
     notes.value = notesRes.data
-    showSuccessToast('Anteckningar hämtad!')
-  
+    showSuccessToast('Data hämtad!')
   } catch (err) {
-    showErrorToast('Kunde inte hämta anteckningar')
+    showErrorToast('Gick inte att hämta data')
   }
-
 })
 </script>
