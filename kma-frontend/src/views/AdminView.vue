@@ -96,7 +96,7 @@
     try{
       await axios.put(`${apiUrl}/api/settings/registration`, {
         allowed: allowRegistration.value
-      })
+      }, config)
       showSuccessToast('Ändrade användarregistrering')
     }catch {
       showErrorToast('Gick inte att ändra användarregistrering ')
