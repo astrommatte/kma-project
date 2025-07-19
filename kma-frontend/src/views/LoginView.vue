@@ -80,6 +80,8 @@ const handleSubmit = async () => {
     } catch (err) {
       showErrorToast('Registrering misslyckades. Kontrollera uppgifter.')
     } 
+  } else {
+    await login()
   }
 }
 
