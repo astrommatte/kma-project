@@ -1,6 +1,8 @@
 package com.kma_backend.kma_backend.user;
 
+import com.kma_backend.kma_backend.setting.SettingService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -12,9 +14,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+    private final SettingService settingService;
 
     @PostMapping("/create")
-    public ResponseEntity<UserDTO> createUser(@RequestBody CreateUserDTO dto) {
+    public ResponseEntity<?> createUser(@RequestBody CreateUserDTO dto) {
+        if (!settingService.isUserRegistrationAllowed()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body("Användarregistrering är inaktiverad.");
+        }
         UserDTO created = userService.createUser(dto);
         return ResponseEntity.ok(created);
     }

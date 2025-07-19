@@ -38,7 +38,7 @@
     </div>
     <div class="mb-3">
       <label>
-        <input type="checkbox" v-model="allowRegister" />
+        <input type="checkbox" v-model="allowRegistration" @change="updateSetting" />
         Tillåt nyregistrering
       </label>
     </div>
@@ -57,7 +57,7 @@
   const showForm = ref(false)
   const users = ref([])
   const selectedUser = ref(null)
-  const allowRegister = ref(true)
+  const allowRegistration = ref(true)
   
   const form = ref({
     firstName: '',
@@ -75,7 +75,9 @@
   const isAdmin = computed(() => currentUser.value?.role === 'ADMIN')
   
   onMounted(async () => {
-    const stored = localStorage.getItem('allowRegister')
+    const reg = await axios.get(`${apiUrl}/api/settings/registration`)
+    allowRegistration.value = reg.data.allowed
+
     if (stored !== null) {
       allowRegister.value = stored === 'true'
     }
@@ -89,14 +91,20 @@
       hideLoading()
     }
 
-  
     const res = await axios.get(`${apiUrl}/api/users/`, config)
     users.value = res.data
   })
 
-  watch(allowRegister, (newVal) => {
-    localStorage.setItem('allowRegister', newVal)
-  })
+  const updateSetting = async () => {
+    try{
+      await axios.put(`${apiUrl}/api/settings/registration`, {
+        allowed: allowRegistration.value
+      })
+      showSuccessToast('Ändrade användarregistrering')
+    }catch {
+      showErrorToast('Gick inte att ändra användarregistrering ')
+    }
+  }
 
   const changePassword = async (userId, newPassword) => {
   try {

@@ -17,7 +17,7 @@
     </form>
 
     <Button
-      v-if="allowRegister"
+      v-if="allowRegistration"
       class="toggle-button"
       @click="toggleMode"
     >
@@ -44,13 +44,17 @@ const password = ref('')
 const error = ref(null)
 const isRegistering = ref(false)
 const router = useRouter()
-const allowRegister = ref(true)
+const allowRegistration = ref(true)
 
 const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8080'
 
-onMounted(() => {
-  const stored = localStorage.getItem('allowRegister')
-  allowRegister.value = stored !== 'false' // default true
+onMounted(async() => {
+  try {
+    const res = await axios.get(`${apiUrl}/api/settings/registration`)
+    allowRegistration.value = res.data.allowed
+  } catch (err) {
+    console.error('Kunde inte hämta inställning för registrering:', err)
+  }
 })
 
 const toggleMode = () => {
@@ -59,9 +63,12 @@ const toggleMode = () => {
 }
 
 const handleSubmit = async () => {
-  error.value = null
-  if (isRegistering.value) {
-    // Registrering
+    if (isRegistering.value) {
+    if (!allowRegistration.value) {
+      showErrorToast('Användarregistrering är avstängd.')
+      return
+    }
+
     try {
       await axios.post(`${apiUrl}/api/users/create`, {
         firstName: firstName.value,
@@ -69,13 +76,10 @@ const handleSubmit = async () => {
         email: email.value,
         password: password.value
       })
-      // Logga in automatiskt efter registrering
       await login()
     } catch (err) {
-      
+      showErrorToast('Registrering misslyckades. Kontrollera uppgifter.')
     } 
-  } else {
-    await login()
   }
 }
 
