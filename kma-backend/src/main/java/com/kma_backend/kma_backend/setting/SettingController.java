@@ -2,6 +2,7 @@ package com.kma_backend.kma_backend.setting;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
@@ -20,6 +21,7 @@ public class SettingController {
         return ResponseEntity.ok(Collections.singletonMap("allowed", allowed));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/registration")
     public ResponseEntity<Void> updateRegistrationSetting(@RequestBody Map<String, Boolean> body) {
         boolean allow = body.getOrDefault("allowed", false);
