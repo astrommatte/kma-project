@@ -125,7 +125,7 @@
         <div class="field mb-3">
           <input type="file" @change="onFileSelected" />
         </div>
-        
+
         <div class="flex gap-2 justify-end mt-4">
           <Button type="submit" label="Spara" icon="pi pi-check" class="p-button-success" />
           <Button type="button" label="Avbryt" icon="pi pi-times" class="p-button-secondary" @click="cancelEdit" />
@@ -153,7 +153,7 @@ import Navbar from '@/components/Navbar.vue'
 import SubscriberList from '@/components/SubscriberList.vue'
 import NotesList from '@/components/NotesList.vue'
 import { Dialog } from 'primevue'
-import { hideLoading, showLoading } from '@/stores/loadingStore'
+import { hideLoading, showLoading, showInfoToast } from '@/stores/loadingStore'
 import { useToaster } from '@/stores/toastStore'
 const { showSuccessToast, showErrorToast } = useToaster()
 
@@ -446,6 +446,7 @@ onMounted(async () => {
   currentUser.value = meRes.data
 
   try{
+    showInfoToast('Hämtar data..')
     const usersRes = await axios.get(`${apiUrl}/api/users/`, config)
     users.value = usersRes.data
 
