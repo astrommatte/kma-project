@@ -78,9 +78,6 @@
     const reg = await axios.get(`${apiUrl}/api/settings/registration`)
     allowRegistration.value = reg.data.allowed
 
-    if (stored !== null) {
-      allowRegister.value = stored === 'true'
-    }
     try{
       showLoading()
       const meRes = await axios.get(`${apiUrl}/api/auth/me`, config)
