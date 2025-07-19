@@ -41,7 +41,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()  // Tillåt preflight
                         .requestMatchers(HttpMethod.POST, "/api/users/**").permitAll()
                         .requestMatchers("/api/images/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/settings/registration").permitAll()
+                        .requestMatchers("/api/settings/registration").permitAll()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(withDefaults())
