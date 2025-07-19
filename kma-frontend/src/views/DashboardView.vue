@@ -154,8 +154,8 @@ import SubscriberList from '@/components/SubscriberList.vue'
 import NotesList from '@/components/NotesList.vue'
 import { Dialog } from 'primevue'
 import { hideLoading, showLoading } from '@/stores/loadingStore'
-import { toastStore } from '@/stores/toastStore'
-const { showSuccessToast, showErrorToast } = toastStore()
+import { useToaster } from '@/stores/toastStore'
+const { showSuccessToast, showErrorToast } = useToaster()
 
 const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8080'
 

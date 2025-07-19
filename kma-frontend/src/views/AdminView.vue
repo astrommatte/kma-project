@@ -51,8 +51,8 @@
   import UsersList from '@/components/UserList.vue'
   import { InputText } from 'primevue'
   import { showLoading, hideLoading } from '@/stores/loadingStore'
-  import { toastStore } from '@/stores/toastStore'
-  const { showSuccessToast, showErrorToast } = toastStore()
+  import { useToaster } from '@/stores/toastStore'
+  const { showSuccessToast, showErrorToast } = useToaster()
 
   const showForm = ref(false)
   const users = ref([])

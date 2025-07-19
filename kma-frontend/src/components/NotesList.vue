@@ -114,7 +114,6 @@ import utc from 'dayjs/plugin/utc'
 import timezone from 'dayjs/plugin/timezone'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import axios from 'axios'
-import { hideLoading, showLoading } from '@/stores/loadingStore'
 
 dayjs.extend(utc)
 dayjs.extend(timezone)

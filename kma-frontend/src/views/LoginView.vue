@@ -34,8 +34,8 @@ import axios from 'axios'
 import { useRouter } from 'vue-router'
 import Button from 'primevue/button'
 import { hideLoading, showLoading } from '@/stores/loadingStore'
-import { toastStore } from '@/stores/toastStore'
-const { showSuccessToast, showErrorToast } = toastStore()
+import { useToaster } from '@/stores/toastStore'
+const { showSuccessToast, showErrorToast } = useToaster()
 
 const firstName = ref('')
 const lastName = ref('')
