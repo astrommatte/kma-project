@@ -125,9 +125,7 @@
         <div class="field mb-3">
           <input type="file" @change="onFileSelected" />
         </div>
-        <FileUpload ref="fileupload" mode="basic" name="demo[]" url="/api/upload" accept="image/*" :maxFileSize="1000000" @upload="onUpload" />
-        <Button label="Upload" @click="upload" severity="secondary" />
-
+        
         <div class="flex gap-2 justify-end mt-4">
           <Button type="submit" label="Spara" icon="pi pi-check" class="p-button-success" />
           <Button type="button" label="Avbryt" icon="pi pi-times" class="p-button-secondary" @click="cancelEdit" />
