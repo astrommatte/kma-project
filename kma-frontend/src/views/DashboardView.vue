@@ -125,6 +125,8 @@
         <div class="field mb-3">
           <input type="file" @change="onFileSelected" />
         </div>
+        <FileUpload ref="fileupload" mode="basic" name="demo[]" url="/api/upload" accept="image/*" :maxFileSize="1000000" @upload="onUpload" />
+        <Button label="Upload" @click="upload" severity="secondary" />
 
         <div class="flex gap-2 justify-end mt-4">
           <Button type="submit" label="Spara" icon="pi pi-check" class="p-button-success" />
@@ -233,7 +235,6 @@ const submitNote = async () => {
       showSuccessToast('Anteckning uppdaterad!')
 
     } else {
-      showLoading()
       const res = await axios.post(
         `${apiUrl}/api/notes/create`,
         noteForm.value,

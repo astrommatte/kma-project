@@ -14,7 +14,7 @@
           <div>
             <div class="text-lg font-semibold">{{ note.title }}</div>
             <small class="text-sm text-gray-500">
-              <span v-if="note.updatedAt !== note.createdAt">
+              <span v-if="!isSameTime(note.updatedAt, note.createdAt)">
                 Uppdaterad för {{ fromNow(note.updatedAt) }}
               </span>
               <span v-else>
@@ -149,6 +149,11 @@ const dialogVisible = computed({
     if (!value) selectedImage.value = null
   }
 })
+
+function isSameTime(t1, t2) {
+  // jämför ISO-strängar exakt
+  return dayjs(t1).isSame(dayjs(t2))
+}
 
 function formatDate(dateString) {
   if (!dateString) return 'Okänd';
