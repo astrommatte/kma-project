@@ -30,18 +30,21 @@ import { Toast } from 'primevue'
 
   @media (max-width: 768px) {
   .p-toast {
-    max-width: 90vw;
+    max-width: 90vw !important;
     left: 5vw !important;
     right: 5vw !important;
-    font-size: 0.85rem;
+    top: 1rem !important;
+    font-size: 0.85rem !important;
   }
 
   .p-toast-message {
-    padding: 0.75rem 1rem;
+    padding: 0.75rem 1rem !important;
   }
 
   .p-toast-detail {
-    white-space: normal;
+    white-space: normal !important;
+    word-break: break-word !important;
   }
 }
+
 </style>
