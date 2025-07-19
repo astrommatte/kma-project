@@ -20,7 +20,7 @@ import FileUpload from 'primevue/fileupload'
 import ProgressSpinner from 'primevue/progressspinner';
 import Tooltip from 'primevue/tooltip';
 import ToastService from 'primevue/toastservice';
-import Toast from 'primevue'
+import Toast from 'primevue/toast'
 
 import 'primeicons/primeicons.css'
 
