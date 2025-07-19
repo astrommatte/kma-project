@@ -27,4 +27,21 @@ import { Toast } from 'primevue'
     align-items: center;
     z-index: 9999;
   }
+
+  @media (max-width: 768px) {
+  .p-toast {
+    max-width: 90vw;
+    left: 5vw !important;
+    right: 5vw !important;
+    font-size: 0.85rem;
+  }
+
+  .p-toast-message {
+    padding: 0.75rem 1rem;
+  }
+
+  .p-toast-detail {
+    white-space: normal;
+  }
+}
 </style>
