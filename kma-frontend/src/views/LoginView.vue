@@ -89,7 +89,7 @@ const login = async () => {
 
     localStorage.setItem('auth', authHeader)
     router.push('/dashboard')
-    showSuccessToast('Loggar in!')
+    showSuccessToast('Inloggad som: ', email.value)
   } catch (err) {
     showErrorToast('Felaktigt lösenord eller email.')
   } finally {

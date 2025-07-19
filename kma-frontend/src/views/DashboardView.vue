@@ -411,9 +411,8 @@ const fetchSubscribers = async () => {
     showLoading()
     const res = await axios.get(`${apiUrl}/api/subscribers/`, config)
     subscribers.value = res.data
-    showSuccessToast('Följare hämtad!')
   } catch (err) {
-    showErrorToast('Gick inte att hämta följare')
+
   } finally {
     hideLoading()
   }
@@ -424,9 +423,8 @@ const fetchNotes = async () => {
     showLoading()
     const res = await axios.get(`${apiUrl}/api/notes/all`, config)
     notes.value = res.data
-    showSuccessToast('Anteckningar hämtad!')
   } catch (err) {
-    showErrorToast('Kunde inte hämta anteckningar')
+
   } finally {
     hideLoading()
   }
@@ -449,13 +447,30 @@ onMounted(async () => {
   const meRes = await axios.get(`${apiUrl}/api/auth/me`, config)
   currentUser.value = meRes.data
 
-  const usersRes = await axios.get(`${apiUrl}/api/users/`, config)
-  users.value = usersRes.data
+  try{
+    const usersRes = await axios.get(`${apiUrl}/api/users/`, config)
+    users.value = usersRes.data
+    showSuccessToast('Användare hämtad!')
+  } catch (err) {
+    showErrorToast('Gick inte att hämta användare')
+  }
 
-  const subsRes = await axios.get(`${apiUrl}/api/subscribers/`, config)
-  subscribers.value = subsRes.data
+  try{
+    const subsRes = await axios.get(`${apiUrl}/api/subscribers/`, config)
+    subscribers.value = subsRes.data
+    showSuccessToast('Följare hämtad!')
+  } catch (err) {
+    showErrorToast('Gick inte att hämta följare')
+  }
 
-  const notesRes = await axios.get(`${apiUrl}/api/notes/all`, config)
-  notes.value = notesRes.data
+  try{
+    const notesRes = await axios.get(`${apiUrl}/api/notes/all`, config)
+    notes.value = notesRes.data
+    showSuccessToast('Anteckningar hämtad!')
+  
+  } catch (err) {
+    showErrorToast('Kunde inte hämta anteckningar')
+  }
+
 })
 </script>
