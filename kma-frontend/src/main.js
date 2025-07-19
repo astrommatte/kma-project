@@ -20,6 +20,7 @@ import FileUpload from 'primevue/fileupload'
 import ProgressSpinner from 'primevue/progressspinner';
 import Tooltip from 'primevue/tooltip';
 import ToastService from 'primevue/toastservice';
+import Toast from 'primevue'
 
 import 'primeicons/primeicons.css'
 
@@ -45,6 +46,7 @@ app.component('Checkbox', Checkbox)
 app.component('Dialog', Dialog)
 app.component('FileUpload', FileUpload)
 app.component('ProgressSpinner', ProgressSpinner)
+app.component('Toast', Toast)
 
 app.directive('tooltip', Tooltip);
 
