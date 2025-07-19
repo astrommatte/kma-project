@@ -153,9 +153,9 @@ import Navbar from '@/components/Navbar.vue'
 import SubscriberList from '@/components/SubscriberList.vue'
 import NotesList from '@/components/NotesList.vue'
 import { Dialog } from 'primevue'
-import { hideLoading, showLoading, showInfoToast } from '@/stores/loadingStore'
+import { hideLoading, showLoading } from '@/stores/loadingStore'
 import { useToaster } from '@/stores/toastStore'
-const { showSuccessToast, showErrorToast } = useToaster()
+const { showSuccessToast, showErrorToast, showInfoToast } = useToaster()
 
 const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8080'
 
