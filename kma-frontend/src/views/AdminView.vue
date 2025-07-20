@@ -150,18 +150,18 @@
     }
   }
   
-  const deleteUser = async (id) => {
-    try {
-      showLoading()
-      await axios.delete(`${apiUrl}/api/users/${id}`, config)
-      users.value = users.value.filter(u => u.id !== id)
-      showSuccessToast('Användare borttagen!')
-    } catch (err) {
-      showErrorToast('Fel vid borttagning av användare')
-    } finally{
-      hideLoading()
-    }
+  const deleteUser = async (user) => {
+  try {
+    showLoading()
+    await axios.delete(`${apiUrl}/api/users/${user.id}`, config)
+    users.value = users.value.filter(u => u.id !== user.id)
+    showSuccessToast('Användare borttagen!')
+  } catch (err) {
+    showErrorToast('Fel vid borttagning av användare')
+  } finally {
+    hideLoading()
   }
+}
 
   const createUser = () => {
   selectedUser.value = null
