@@ -17,7 +17,6 @@ public class WebConfig {
                         .allowedOrigins("http://localhost:5173", "https://tubular-griffin-aa4b92.netlify.app")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
-                        .exposedHeaders("Authorization")
                         .allowCredentials(true);
             }
         };

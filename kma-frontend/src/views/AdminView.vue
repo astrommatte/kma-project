@@ -129,7 +129,7 @@
         if (form.value.password && form.value.password.length > 0) {
          await changePassword(selectedUser.value.id, form.value.password)
         }
-        const res = await axios.put(`${apiUrl}/api/users/update/${selectedUser.value.id}`, form.value, config)
+        const res = await axios.put(`${apiUrl}/api/users/${selectedUser.value.id}`, form.value, config)
         const updated = res.data
         const index = users.value.findIndex(u => u.id === updated.id)
         users.value[index] = updated
@@ -153,7 +153,7 @@
   const deleteUser = async (id) => {
     try {
       showLoading()
-      await axios.delete(`${apiUrl}/api/users/delete/${id}`, config)
+      await axios.delete(`${apiUrl}/api/users/${id}`, config)
       users.value = users.value.filter(u => u.id !== id)
       showSuccessToast('Användare borttagen!')
     } catch (err) {
