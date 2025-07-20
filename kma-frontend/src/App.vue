@@ -14,7 +14,7 @@ import { Toast } from 'primevue'
   </div>
 </template>
 
-<style scoped>
+<style>
   .overlay-spinner {
     position: fixed;
     top: 0;
