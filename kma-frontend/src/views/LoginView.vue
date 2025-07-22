@@ -17,7 +17,7 @@
     </form>
 
     <Button
-      v-if="!allowRegistration"
+      v-if="allowRegistration"
       class="toggle-button"
       @click="toggleMode"
     >
@@ -44,7 +44,7 @@ const password = ref('')
 const error = ref(null)
 const isRegistering = ref(false)
 const router = useRouter()
-const allowRegistration = ref(true)
+const allowRegistration = ref(false)
 
 const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8080'
 
