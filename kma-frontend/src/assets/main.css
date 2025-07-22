@@ -7,7 +7,7 @@ body {
     Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   font-weight: 400;
   color: #333;
-  background-color: #f9fafb;
+  background-color: #f4f6f8;
   margin: 0;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
@@ -54,6 +54,33 @@ input:focus, select:focus, textarea:focus {
 }
 
 @media (max-width: 768px) {
+  .login-container,
+  .admin-container, 
+  .form-container {
+    padding: 1em;
+    font-size: 0.9rem;
+  }
+
+  input,
+  select,
+  button {
+    font-size: 0.9rem;
+    padding: 0.5em;
+  }
+
+  h1, h2, h3 {
+    font-size: 1.2rem;
+  }
+
+  .p-button {
+    font-size: 0.85rem !important;
+    padding: 0.5em 1em !important;
+  }
+
+  .p-toast {
+    font-size: 0.8rem !important;
+  }
+
   .p-toast {
     max-width: 90vw !important;
     left: 5vw !important;
@@ -71,4 +98,5 @@ input:focus, select:focus, textarea:focus {
     word-break: break-word !important;
   }
 }
+
 
