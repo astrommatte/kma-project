@@ -17,7 +17,7 @@
     </form>
 
     <Button
-      v-if="allowRegistration"
+      v-if="!allowRegistration"
       class="toggle-button"
       @click="toggleMode"
     >
