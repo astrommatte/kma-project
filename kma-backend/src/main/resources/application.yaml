@@ -24,7 +24,6 @@ cloudinary:
   api-key: ${CLOUD_KEY}
   api-secret: ${CLOUD_SECRET}
 
-
 logging:
   level:
     org.hibernate.SQL: DEBUG         # Loggar SQL-satser

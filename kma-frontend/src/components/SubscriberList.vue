@@ -1,4 +1,21 @@
 <template>
+    <div class="p-d-flex p-ai-center p-gap-3 p-bg-gray-800 p-p-3" style="color: white;">
+    <Select
+      :options="users"
+      optionLabel="firstName"
+      optionValue="id"
+      placeholder="Välj användare"
+      class="p-inputtext-sm"
+      @change="handleUserSelect"
+      :filter="true"
+      filterPlaceholder="Sök användare..."
+      :showClear="true"
+      style="min-width: 200px;"
+    />
+  </div>
+      <h5 class="text-xl font-bold mb-2">
+        Kunder för {{ selectedUser?.firstName || '– ingen vald(Välj användare i listan ovan)' }}
+      </h5>
   <DataTable :value="subscribers" dataKey="id" class="p-datatable-sm" responsiveLayout="scroll">
     <Column field="firstName" header="Förnamn" />
     <Column field="lastName" header="Efternamn" />
@@ -29,9 +46,10 @@ import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
 import Button from 'primevue/button'
 import { useConfirm } from 'primevue/useconfirm'
+import { Select } from 'primevue'
 
 const confirm = useConfirm()
-const emit = defineEmits(['edit-subscriber', 'delete-subscriber'])
+const emit = defineEmits(['edit-subscriber', 'delete-subscriber','user-selected'])
 
 const confirmDelete = (subscriber) => {
   confirm.require({
@@ -47,7 +65,14 @@ const confirmDelete = (subscriber) => {
   })
 }
 
-defineProps({
-  subscribers: Array
+const props = defineProps({
+  subscribers: Array,
+  selectedUser: Object,
+  users: Array,
 })
+
+const handleUserSelect = (e) => {
+  const selected = props.users.find(u => u.id === e.value)
+  emit('user-selected', selected)
+}
 </script>

@@ -9,17 +9,13 @@
     </router-link>
 
     <Navbar
-      :users="users"
       :currentUser="currentUser"
-      @user-selected="setSelectedUser"
     />
 
-    
-      <h5 class="text-xl font-bold mb-2">
-        Kunder för {{ selectedUser?.firstName || '– ingen vald(Välj användare i listan ovan)' }}
-      </h5>
       <SubscriberList
         :subscribers="filteredSubscribers"
+        :users="users"
+        @user-selected="setSelectedUser"
         @edit-subscriber="editSubscriber"
         @delete-subscriber="deleteSubscriber"
       />

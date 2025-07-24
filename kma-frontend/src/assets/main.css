@@ -54,31 +54,17 @@ input:focus, select:focus, textarea:focus {
 }
 
 @media (max-width: 768px) {
-  .login-container,
-  .admin-container, 
-  .form-container {
-    padding: 1em;
-    font-size: 0.9rem;
-  }
-
-  input,
-  select,
-  button {
-    font-size: 0.9rem;
-    padding: 0.5em;
-  }
-
   h1, h2, h3 {
-    font-size: 1.2rem;
+    font-size: 0.9rem;
   }
 
   .p-button {
-    font-size: 0.85rem !important;
+    font-size: 0.7rem !important;
     padding: 0.5em 1em !important;
   }
 
   .p-toast {
-    font-size: 0.8rem !important;
+    font-size: 0.7rem !important;
   }
 
   .p-toast {

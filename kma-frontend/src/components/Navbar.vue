@@ -11,7 +11,7 @@
       @click="logout"
     />
   </div>
-  <div class="p-d-flex p-ai-center p-gap-3 p-bg-gray-800 p-p-3" style="color: white;">
+  <!-- <div class="p-d-flex p-ai-center p-gap-3 p-bg-gray-800 p-p-3" style="color: white;">
     <Select
       :options="users"
       optionLabel="firstName"
@@ -24,7 +24,7 @@
       :showClear="true"
       style="min-width: 200px;"
     />
-  </div>
+  </div> -->
 </template>
 
 <script setup>
@@ -33,17 +33,16 @@ import Button from 'primevue/button'
 import { Select } from 'primevue'
 
 const props = defineProps({
-  users: Array,
   currentUser: Object
 })
 
-const emit = defineEmits(['user-selected'])
+// const emit = defineEmits(['user-selected'])
 
-const handleUserSelect = (e) => {
-  // e.value är det valda id:t från Dropdown
-  const selected = props.users.find(u => u.id === e.value)
-  emit('user-selected', selected)
-}
+// const handleUserSelect = (e) => {
+//   // e.value är det valda id:t från Dropdown
+//   const selected = props.users.find(u => u.id === e.value)
+//   emit('user-selected', selected)
+// }
 
 const logout = () => {
   localStorage.removeItem('auth')
