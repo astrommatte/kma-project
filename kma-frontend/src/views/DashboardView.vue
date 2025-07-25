@@ -12,13 +12,8 @@
       :currentUser="currentUser"
     />
 
-      <SubscriberList
-        :subscribers="filteredSubscribers"
-        :users="users"
-        @user-selected="setSelectedUser"
-        @edit-subscriber="editSubscriber"
-        @delete-subscriber="deleteSubscriber"
-      />
+
+
       <h5>* När man skapar en ny kund så får den inloggande användaren kunden under sig.</h5>
       <Button
         label="Skapa ny kund"
@@ -26,6 +21,18 @@
         icon="pi pi-plus"
         @click="createSubscriber"
       />
+      <!-- <h5 class="text-xl font-bold mb-2">
+        Kunder för {{ selectedUser?.firstName || '– ingen vald (Välj användare i listan ovan)' }}
+      </h5> -->
+      <SubscriberList
+        :subscribers="filteredSubscribers"
+        :users="users"
+        @user-selected="setSelectedUser"
+        @edit-subscriber="editSubscriber"
+        @delete-subscriber="deleteSubscriber"
+      />
+      
+
 
       <Dialog
         v-model:visible="showSubForm"

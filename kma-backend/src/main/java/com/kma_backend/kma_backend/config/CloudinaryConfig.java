@@ -27,13 +27,4 @@ public class CloudinaryConfig {
                 "api_secret", apiSecret
         ));
     }
-
-    @PostConstruct
-    public void init() {
-        System.out.println("Cloudinary config loaded:");
-        System.out.println("cloudName = " + cloudName);
-        System.out.println("apiKey = " + apiKey);
-        System.out.println("apiSecret = " + (apiSecret != null ? "***" : "null"));
-    }
-
 }

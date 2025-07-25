@@ -1,22 +1,44 @@
 <template>
-    <div class="p-d-flex p-ai-center p-gap-3 p-bg-gray-800 p-p-3" style="color: white;">
-    <Select
-      :options="users"
-      optionLabel="firstName"
-      optionValue="id"
-      placeholder="Välj användare"
-      class="p-inputtext-sm"
-      @change="handleUserSelect"
-      :filter="true"
-      filterPlaceholder="Sök användare..."
-      :showClear="true"
-      style="min-width: 200px;"
+
+<div class="p-d-flex p-ai-center p-jc-between p-gap-3 p-bg-gray-800 p-p-3" style="color: white;">
+  <Select
+    :options="users"
+    optionLabel="firstName"
+    optionValue="id"
+    placeholder="Välj användare"
+    class="p-inputtext-sm"
+    @change="handleUserSelect"
+    :filter="true"
+    filterPlaceholder="Sök användare..."
+    :showClear="true"
+    style="min-width: 200px;"
+  />
+
+  <h5 class="text-sm m-0">
+    I listan visas kunder för den valda användaren ovan.
+  </h5>
+</div>
+
+
+    <!-- 🔍 Sökfält -->
+  <div class="p-inputgroup mb-3">
+    <span class="p-inputgroup-addon">
+      <i class="pi pi-search"></i>
+    </span>
+    <InputText
+      type="text"
+      v-model="searchTerm"
+      placeholder="Sök kund i listan.."
+      class="p-inputtext p-component"
     />
   </div>
-      <h5 class="text-xl font-bold mb-2">
-        Kunder för {{ selectedUser?.firstName || '– ingen vald(Välj användare i listan ovan)' }}
-      </h5>
-  <DataTable :value="subscribers" dataKey="id" class="p-datatable-sm" responsiveLayout="scroll">
+
+  <DataTable
+    :value="filteredSubscribers"
+    dataKey="id"
+    class="p-datatable-sm"
+    responsiveLayout="scroll"
+  >
     <Column field="firstName" header="Förnamn" />
     <Column field="lastName" header="Efternamn" />
     <Column field="email" header="Email" />
@@ -41,12 +63,11 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits } from 'vue'
+import { defineProps, defineEmits, ref, computed } from 'vue'
 import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
 import Button from 'primevue/button'
 import { useConfirm } from 'primevue/useconfirm'
-import { Select } from 'primevue'
 
 const confirm = useConfirm()
 const emit = defineEmits(['edit-subscriber', 'delete-subscriber','user-selected'])
@@ -71,8 +92,30 @@ const props = defineProps({
   users: Array,
 })
 
+const searchTerm = ref('')
+
+const filteredSubscribers = computed(() => {
+  if (!searchTerm.value) return props.subscribers
+
+  return props.subscribers.filter(sub =>
+    [sub.firstName, sub.lastName, sub.email]
+      .join(' ')
+      .toLowerCase()
+      .includes(searchTerm.value.toLowerCase())
+  )
+})
+
 const handleUserSelect = (e) => {
+  // e.value är det valda id:t från Dropdown
   const selected = props.users.find(u => u.id === e.value)
   emit('user-selected', selected)
 }
 </script>
+
+<style scoped>
+*{
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+</style>

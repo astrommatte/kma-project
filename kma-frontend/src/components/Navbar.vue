@@ -1,63 +1,54 @@
 <template>
-  <div class="logged-in-panel">
-    <h5 v-if="currentUser" class="logged-in-color">
-      Inloggad som: <strong>{{ currentUser.firstName }} {{ currentUser.lastName }}</strong>
-    </h5>
+  <header class="navbar">
+    <div class="navbar-user">
+      <i class="pi pi-user" style="margin-right: 0.5rem; color: #6c757d;"></i>
+      <span v-if="currentUser">
+        Inloggad som: <strong>{{ currentUser.firstName }} {{ currentUser.lastName }}</strong>
+      </span>
+    </div>
 
     <Button
       label="Logga ut"
       icon="pi pi-sign-out"
-      class="p-button-danger"
+      class="p-button-sm p-button-danger"
       @click="logout"
     />
-  </div>
-  <!-- <div class="p-d-flex p-ai-center p-gap-3 p-bg-gray-800 p-p-3" style="color: white;">
-    <Select
-      :options="users"
-      optionLabel="firstName"
-      optionValue="id"
-      placeholder="Välj användare"
-      class="p-inputtext-sm"
-      @change="handleUserSelect"
-      :filter="true"
-      filterPlaceholder="Sök användare..."
-      :showClear="true"
-      style="min-width: 200px;"
-    />
-  </div> -->
+  </header>
 </template>
 
 <script setup>
-import { defineProps, defineEmits } from 'vue'
+import { defineProps } from 'vue'
 import Button from 'primevue/button'
-import { Select } from 'primevue'
 
 const props = defineProps({
   currentUser: Object
 })
 
-// const emit = defineEmits(['user-selected'])
-
-// const handleUserSelect = (e) => {
-//   // e.value är det valda id:t från Dropdown
-//   const selected = props.users.find(u => u.id === e.value)
-//   emit('user-selected', selected)
-// }
-
 const logout = () => {
   localStorage.removeItem('auth')
-  location.href = '/' // eller router.push om du använder Vue Router i setup
+  location.href = '/'
 }
 </script>
 
-<style>
-.logged-in-color{
-  color: rgba(37, 31, 31, 0.459);
-}
-
-.logged-in-panel {
+<style scoped>
+.navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 1rem 2rem;
+  margin-bottom: 50px;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.navbar-user {
+  display: flex;
+  align-items: center;
+  font-size: 0.95rem;
+  color: #495057;
 }
 </style>

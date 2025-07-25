@@ -1,7 +1,7 @@
 <template>
-      <div class="mb-4 flex align-items-center gap-2">
-      <label for="showNotes">Visa anteckningar (som alla kan se)</label>
-      <Checkbox v-model="showNotes" binary />
+    <div class="mb-4 flex align-items-center gap-2">
+     <label for="showNotes">Kryssa i rutan för att visa anteckningar.</label>
+     <Checkbox v-model="showNotes" binary />
     </div>
   <Accordion multiple>
     <AccordionTab
