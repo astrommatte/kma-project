@@ -17,7 +17,7 @@
   <h5 class="text-sm m-0">
     I listan visas kunder för den valda användaren ovan.
   </h5>
-</div>
+  </div>
 
 
     <!-- 🔍 Sökfält -->

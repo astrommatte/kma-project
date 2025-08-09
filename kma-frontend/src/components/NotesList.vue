@@ -3,6 +3,15 @@
      <label for="showNotes">Kryssa i rutan för att visa anteckningar.</label>
      <Checkbox v-model="showNotes" binary />
     </div>
+    <div class="p-mt-3">
+        <Button
+          v-if="showNotes"
+          label="Skapa ny anteckning"
+          icon="pi pi-plus"
+          class="p-button-primary"
+          @click="$emit('create-note')"
+        />
+      </div>
   <Accordion multiple>
     <AccordionTab
      v-if="showNotes"
@@ -89,17 +98,6 @@
       style="width: 100%; height: auto; border-radius: 6px;"
     />
   </Dialog>
-
-
-  <div class="p-mt-3">
-    <Button
-      v-if="showNotes"
-      label="Skapa ny anteckning"
-      icon="pi pi-plus"
-      class="p-button-primary"
-      @click="$emit('create-note')"
-    />
-  </div>
 </template>
 
 
