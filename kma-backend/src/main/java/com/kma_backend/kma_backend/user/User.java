@@ -2,12 +2,14 @@ package com.kma_backend.kma_backend.user;
 
 import com.kma_backend.kma_backend.note.Note;
 import com.kma_backend.kma_backend.subscriber.Subscriber;
+import com.kma_backend.kma_backend.todo.Todo;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -37,5 +39,8 @@ public class User {
 
     @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Note> notes;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Todo> todos = new ArrayList<>();
 }
 

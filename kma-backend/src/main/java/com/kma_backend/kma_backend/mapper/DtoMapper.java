@@ -6,6 +6,8 @@ import com.kma_backend.kma_backend.note.Note;
 import com.kma_backend.kma_backend.note.NoteDTO;
 import com.kma_backend.kma_backend.subscriber.Subscriber;
 import com.kma_backend.kma_backend.subscriber.SubscriberDTO;
+import com.kma_backend.kma_backend.todo.Todo;
+import com.kma_backend.kma_backend.todo.TodoDTO;
 import com.kma_backend.kma_backend.user.User;
 import com.kma_backend.kma_backend.user.UserDTO;
 import com.kma_backend.kma_backend.user.UserRole;
@@ -64,6 +66,15 @@ public class DtoMapper {
                 .toList();
         dto.setImages(images);
 
+        return dto;
+    }
+
+    public TodoDTO toTodoDTO(Todo todo) {
+        TodoDTO dto = new TodoDTO();
+        dto.setId(todo.getId());
+        dto.setTask(todo.getTask());
+        dto.setCompleted(todo.isCompleted());
+        dto.setCreatedAt(todo.getCreatedAt());
         return dto;
     }
 

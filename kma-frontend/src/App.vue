@@ -3,9 +3,40 @@ import { RouterLink, RouterView } from 'vue-router'
 import ConfirmDialog from 'primevue/confirmdialog'
 import { isLoading } from './stores/loadingStore'
 import { Toast } from 'primevue'
+import Navbar from './components/Navbar.vue'
+import { ref, onMounted, onUnmounted } from 'vue'
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
+const currentUser = ref(null)
+
+onMounted(() => {
+  const saved = localStorage.getItem('currentUser')
+  if (saved) {
+    try {
+      currentUser.value = JSON.parse(saved)
+    } catch { currentUser.value = null }
+  }
+})
+
+// event handler som tar emot login från LoginView
+const onAuthChange = (e) => {
+  if (e?.detail) {
+    currentUser.value = e.detail
+  }
+}
+
+window.addEventListener('auth-change', onAuthChange)
+
+// cleanup (valfritt i root men bra vana)
+onUnmounted(() => {
+  window.removeEventListener('auth-change', onAuthChange)
+})
 </script>
 
 <template>
+  <!-- Visa Navbar endast om vi inte är på login-sidan -->
+  <Navbar v-if="route.name !== 'login'" :current-user="currentUser" />
   <RouterView />
   <ConfirmDialog />
   <Toast />

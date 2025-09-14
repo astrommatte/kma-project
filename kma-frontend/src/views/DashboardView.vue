@@ -1,17 +1,13 @@
 <template>
   <div>
-    <router-link
-      v-if="currentUser?.role === 'ADMIN'"
-      to="/admin"
-      class="p-button p-button-rounded p-button-purple"
+    <Dialog
+      v-model:visible="showTodo"
+      header="Inköpslista"
+      :modal="true"
+      :style="{ width: '30rem' }"
     >
-      Adminpanel
-    </router-link>
-
-    <Navbar
-      :currentUser="currentUser"
-    />
-
+    <Todo />
+    </Dialog>
 
 
       <h5>* När man skapar en ny kund så får den inloggande användaren kunden under sig.</h5>
@@ -109,41 +105,6 @@
       />
     </div>
   </div>
-    <!-- Noteringsformulär -->
-    <Dialog
-      v-model:visible="showNoteForm"
-      :header="editingNote ? 'Redigera notering' : 'Skapa ny notering'"
-      :modal="true"
-      :closable="false"
-      :style="{ width: '40rem' }"
-    >
-      <form @submit.prevent="submitNote" class="p-fluid">
-        <div class="field mb-3">
-          <InputText v-model="noteForm.title" v-tooltip.focus.top="'Ange titel till anteckningen'" placeholder="Titel" required />
-        </div>
-        <div class="field mb-3">
-          <Textarea v-model="noteForm.content" v-tooltip.focus.top="'Ange innehållet i anteckningen'" placeholder="Innehåll" rows="5" required />
-        </div>
-          <!-- Ny: fil-upload -->
-        <div class="field mb-3">
-          <input type="file" @change="onFileSelected" />
-        </div>
-
-        <div class="flex gap-2 justify-end mt-4">
-          <Button type="submit" label="Spara" icon="pi pi-check" class="p-button-success" />
-          <Button type="button" label="Avbryt" icon="pi pi-times" class="p-button-secondary" @click="cancelEdit" />
-        </div>
-      </form>
-    </Dialog>
-
-    <!-- Noteringslista -->
-    <NotesList
-      :notes="notes"
-      :current-user="currentUser"
-      @create-note="createNote"
-      @edit-note="updateNote"
-      @delete-note="deleteNote"
-    />
   </div>
 </template>
 
@@ -151,10 +112,9 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import axios from 'axios'
-
+import Todo from '@/components/Todo.vue'
 import Navbar from '@/components/Navbar.vue'
 import SubscriberList from '@/components/SubscriberList.vue'
-import NotesList from '@/components/NotesList.vue'
 import { Dialog } from 'primevue'
 import { hideLoading, showLoading } from '@/stores/loadingStore'
 import { useToaster } from '@/stores/toastStore'
@@ -166,10 +126,8 @@ const images = ref([]);
 
 const users = ref([])
 const subscribers = ref([])
-const notes = ref([])
-const editingNote = ref(null)
-const showNoteForm = ref(false)
-const selectedFile = ref(null);
+
+const showTodo = ref(false)
 
 const selectedUser = ref(null)
 const currentUser = ref(null)
@@ -188,12 +146,6 @@ const subForm = ref({
   newOwnerEmail: ''
 })
 
-const noteForm = ref({
-  title: '',
-  content: '',
-})
-
-
 const authHeader = localStorage.getItem('auth')
 const config = {
   headers: { Authorization: authHeader }
@@ -208,119 +160,7 @@ const filteredSubscribers = computed(() => {
   return subscribers.value.filter(s => s.owner?.id === selectedUser.value?.id)
 })
 
-async function fetchImages(noteId) {
-  try {
-    const res = await axios.get(`${apiUrl}/api/notes/${noteId}/images`, config);
-    images.value = res.data;
-  } catch (err) {
-    console.error('Kunde inte hämta bilder:', err);
-  }
-}
 
-function onFileSelected(event) {
-  selectedFile.value = event.target.files[0];
-}
-
-
-const submitNote = async () => {
-  try {
-    showLoading()
-    let noteId = null;
-    if (editingNote.value) {
-      const res = await axios.put(
-        `${apiUrl}/api/notes/update/${editingNote.value.id}`,
-        noteForm.value,
-        config
-      );
-      noteId = res.data.id;
-      showSuccessToast('Anteckning uppdaterad!')
-
-    } else {
-      const res = await axios.post(
-        `${apiUrl}/api/notes/create`,
-        noteForm.value,
-        config
-      );
-      noteId = res.data.id;
-      notes.value.push(res.data);
-      showSuccessToast('Anteckning skapad!')
-    }
-
-
-    // 2. Om fil valts, ladda upp bilden kopplad till noteId
-    if (selectedFile.value) {
-      const formData = new FormData();
-      formData.append('file', selectedFile.value);
-      formData.append('noteId', noteId);
-
-      await axios.post(`${apiUrl}/api/images/upload`, formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-      Authorization: localStorage.getItem('auth') || '', // <-- hämta härifrån
-    },
-    });
-
-
-          selectedFile.value = null;
-        }
-
-        // Rensa formulär och stäng dialog
-        noteForm.value.title = '';
-        noteForm.value.content = '';
-        showNoteForm.value = false;
-        editingNote.value = null;
-
-        await fetchNotes(); // hämta om noteringar
-
-      } catch (err) {
-        showErrorToast('Fel vid spara/redigera')
-      } finally {
-        hideLoading()
-      }
-    };
-
-const createNote = () => {
-  noteForm.value = { title: '', content: '', images: [] }
-  showNoteForm.value = true
-}
-
-const cancelCreate = () => {
-  editingNote.value = null
-  noteForm.value.title = ''
-  noteForm.value.content = ''
-  showNoteForm.value = false;
-}
-
-const updateNote = note => {
-  editingNote.value = note
-  noteForm.value = {
-    title: note.title,
-    content: note.content,
-    images: [],
-  }
-  showNoteForm.value = true
-}
-
-const cancelEdit = () => {
-  editingNote.value = null
-  noteForm.value.title = ''
-  noteForm.value.content = ''
-  noteForm.value.images = []
-  showNoteForm.value = false;
-}
-
-const deleteNote = async id => {
-  try {
-    showLoading()
-    await axios.delete(`${apiUrl}/api/notes/${id}`, config)
-    notes.value = notes.value.filter(n => n.id !== id)
-    showSuccessToast('Tagit bort anteckningen')
-  } catch (err) {
-    showErrorToast('Gick inte att ta bort anteckning')
-  } finally {
-    hideLoading()
-  }
-}
 
 
 
@@ -419,17 +259,7 @@ const fetchSubscribers = async () => {
   }
 }
 
-const fetchNotes = async () => {
-  try {
-    showLoading()
-    const res = await axios.get(`${apiUrl}/api/notes/all`, config)
-    notes.value = res.data
-  } catch (err) {
 
-  } finally {
-    hideLoading()
-  }
-}
 
 const deleteSubscriber = async (subscriber) => {
   try {
@@ -456,8 +286,6 @@ onMounted(async () => {
     const subsRes = await axios.get(`${apiUrl}/api/subscribers/`, config)
     subscribers.value = subsRes.data
 
-    const notesRes = await axios.get(`${apiUrl}/api/notes/all`, config)
-    notes.value = notesRes.data
     showSuccessToast('Data hämtad!')
   } catch (err) {
     showErrorToast('Gick inte att hämta data')

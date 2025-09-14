@@ -89,11 +89,20 @@ const login = async () => {
   try {
     showLoading()
     const authHeader = 'Basic ' + btoa(`${email.value}:${password.value}`)
-    await axios.get(`${apiUrl}/api/auth/me`, {
+
+    // Kontrollera inloggning
+    const meRes = await axios.get(`${apiUrl}/api/auth/me`, {
       headers: { Authorization: authHeader }
     })
 
+    // Spara auth och currentUser i localStorage
     localStorage.setItem('auth', authHeader)
+    localStorage.setItem('currentUser', JSON.stringify(meRes.data))
+
+    // Dispatch ett event så App.vue kan uppdatera currentUser utan reload
+    window.dispatchEvent(new CustomEvent('auth-change', { detail: meRes.data }))
+
+    // Navigera först när allt är klart
     router.push('/dashboard')
   } catch (err) {
     showErrorToast('Felaktigt lösenord eller email.')
@@ -101,6 +110,7 @@ const login = async () => {
     hideLoading()
   }
 }
+
 </script>
 
 <style scoped>

@@ -8,7 +8,7 @@ export function useToaster() {
       severity: 'success',
       summary: 'Success',
       detail: msg,
-      life: 3000,
+      life: 1000,
     })
   }
 
@@ -17,7 +17,7 @@ export function useToaster() {
       severity: 'error',
       summary: 'Error',
       detail: msg,
-      life: 4000,
+      life: 1000,
     })
   }
 
@@ -26,7 +26,7 @@ export function useToaster() {
         severity: 'info',
         summary: 'Info',
         detail: msg,
-        life: 4000,
+        life: 1000,
       })
   }
 

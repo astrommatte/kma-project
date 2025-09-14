@@ -1,5 +1,13 @@
 <template>
     <div class="p-6">
+    <Dialog
+      v-model:visible="showTodo"
+      header="Inköpslista"
+      :modal="true"
+      :style="{ width: '30rem' }"
+    >
+    <Todo />
+    </Dialog>
       <h1 class="text-2xl font-bold mb-4">Adminpanel</h1>
   
       <div v-if="!isAdmin" class="text-red-600">Du har inte behörighet att visa denna sida.</div>
@@ -46,6 +54,8 @@
   </template>
   
   <script setup>
+  import Navbar from '@/components/Navbar.vue'
+  import Todo from '@/components/Todo.vue'
   import { ref, onMounted, computed, watch } from 'vue'
   import axios from 'axios'
   import UsersList from '@/components/UserList.vue'
@@ -54,6 +64,7 @@
   import { useToaster } from '@/stores/toastStore'
   const { showSuccessToast, showErrorToast } = useToaster()
 
+  const showTodo = ref(false)
   const showForm = ref(false)
   const users = ref([])
   const selectedUser = ref(null)
